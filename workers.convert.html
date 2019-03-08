@@ -1,0 +1,319 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>workers.convert package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="workers-convert-package">
+<h1>workers.convert package<a class="headerlink" href="#workers-convert-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-workers.convert.convert_image">
+<span id="workers-convert-convert-image-module"></span><h2>workers.convert.convert_image module<a class="headerlink" href="#module-workers.convert.convert_image" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="workers.convert.convert_image.convert_jpg_to_pdf">
+<code class="descclassname">workers.convert.convert_image.</code><code class="descname">convert_jpg_to_pdf</code><span class="sig-paren">(</span><em>source_file</em>, <em>target_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_image.html#convert_jpg_to_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_image.convert_jpg_to_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a 1 Paged PDF Document from a jpg file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_file</strong> (<em>str</em>) – path to the jpg</li>
+<li><strong>target_file</strong> (<em>str</em>) – desired output path</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.convert.convert_image.convert_tif_to_jpg">
+<code class="descclassname">workers.convert.convert_image.</code><code class="descname">convert_tif_to_jpg</code><span class="sig-paren">(</span><em>source_file</em>, <em>target_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_image.html#convert_tif_to_jpg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_image.convert_tif_to_jpg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the parameter source file and saves it as the target file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_file</strong> (<em>str</em>) – path to the TIF source file</li>
+<li><strong>target_file</strong> (<em>str</em>) – path to the generated output file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.convert.convert_image.convert_tif_to_ptif">
+<code class="descclassname">workers.convert.convert_image.</code><code class="descname">convert_tif_to_ptif</code><span class="sig-paren">(</span><em>source_file</em>, <em>output_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_image.html#convert_tif_to_ptif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_image.convert_tif_to_ptif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the source TIFF file to PTIF via imagemagick shell command.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.convert.convert_image.tif_to_txt">
+<code class="descclassname">workers.convert.convert_image.</code><code class="descname">tif_to_txt</code><span class="sig-paren">(</span><em>source_file</em>, <em>target_file</em>, <em>language='eng'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_image.html#tif_to_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_image.tif_to_txt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract text from tiff file via OCR and writes to target file.</p>
+<p>Availabe languages can be found here:
+<a class="reference external" href="https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#languages">https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#languages</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_file</strong> (<em>str</em>) – file path to tiff</li>
+<li><strong>target_file</strong> (<em>str</em>) – name of generated text-file</li>
+<li><strong>language</strong> (<em>str</em>) – used by tesseract. Possible values: see above.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers.convert.convert_pdf">
+<span id="workers-convert-convert-pdf-module"></span><h2>workers.convert.convert_pdf module<a class="headerlink" href="#module-workers.convert.convert_pdf" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="workers.convert.convert_pdf.convert_pdf_to_tif">
+<code class="descclassname">workers.convert.convert_pdf.</code><code class="descname">convert_pdf_to_tif</code><span class="sig-paren">(</span><em>source_file</em>, <em>output_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_pdf.html#convert_pdf_to_tif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_pdf.convert_pdf_to_tif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a TIF for every Page in the PDF and saves them to the output_dir.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_file</strong> (<em>str</em>) – path to the PDF</li>
+<li><strong>output_dir</strong> (<em>str</em>) – path to the output Directory</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.convert.convert_pdf.convert_pdf_to_txt">
+<code class="descclassname">workers.convert.convert_pdf.</code><code class="descname">convert_pdf_to_txt</code><span class="sig-paren">(</span><em>source_file</em>, <em>output_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_pdf.html#convert_pdf_to_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_pdf.convert_pdf_to_txt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create text file for every page of source-PDF file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_file</strong> (<em>str</em>) – PDF to generate text files from</li>
+<li><strong>output_dir</strong> (<em>str</em>) – target directory for generated files</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.convert.convert_pdf.split_merge_pdf">
+<code class="descclassname">workers.convert.convert_pdf.</code><code class="descname">split_merge_pdf</code><span class="sig-paren">(</span><em>files</em>, <em>path: str</em>, <em>filename='merged.pdf'</em>, <em>remove_old=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/convert_pdf.html#split_merge_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.convert_pdf.split_merge_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a PDF file by combining sections of other PDFs.</p>
+<p>File paths are relative to the path given in the parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>files</strong> (<em>list</em>) – list of the source pdf files as dict in the format:
+{‘file’: relative_path, ‘range’: [start, end]}</li>
+<li><strong>path</strong> (<em>string</em>) – The path to the dir where the created file go</li>
+<li><strong>filename</strong> (<em>string</em>) – name of the generated pdf file</li>
+<li><strong>remove_old</strong> (<em>bool</em>) – if True, remove the files used for the split/merge</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers.convert.image_scaling">
+<span id="workers-convert-image-scaling-module"></span><h2>workers.convert.image_scaling module<a class="headerlink" href="#module-workers.convert.image_scaling" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="workers.convert.image_scaling.scale_image">
+<code class="descclassname">workers.convert.image_scaling.</code><code class="descname">scale_image</code><span class="sig-paren">(</span><em>source</em>, <em>target_path</em>, <em>max_width</em>, <em>max_height</em>, <em>keep_ratio=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/image_scaling.html#scale_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.image_scaling.scale_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale the image to the given size.</p>
+<p>Opens the given image and scales the size to the given values for
+width and height while keeping the aspect ratio if selected so.
+The new file will be named like the original one with the new size added
+with underscores.</p>
+<p>Tested, working for JPEG and TIFF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> (<em>str</em>) – path to the image to be scaled, with filename</li>
+<li><strong>target_path</strong> (<em>str</em>) – path without filename to save generated image to</li>
+<li><strong>max_width</strong> (<em>int</em>) – maximum width in pixels of the generated image</li>
+<li><strong>max_height</strong> (<em>int</em>) – maximum height in pixels of the generated image</li>
+<li><strong>keep_ratio</strong> (<em>bool</em>) – keeps the ratio of the generated image</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers.convert.tasks">
+<span id="workers-convert-tasks-module"></span><h2>workers.convert.tasks module<a class="headerlink" href="#module-workers.convert.tasks" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="workers.convert.tasks.MergeConvertedPdfTask">
+<em class="property">class </em><code class="descclassname">workers.convert.tasks.</code><code class="descname">MergeConvertedPdfTask</code><a class="reference internal" href="_modules/workers/convert/tasks.html#MergeConvertedPdfTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.tasks.MergeConvertedPdfTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="workers.html#workers.base_task.BaseTask" title="workers.base_task.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">workers.base_task.BaseTask</span></code></a></p>
+<p>Merge all pdf files in a representation into one.</p>
+<p>TaskParams:
+-representation: The name of the representation</p>
+<p>Preconditions:</p>
+<p>Creates:
+-merged.pdf in the given representation</p>
+<dl class="method">
+<dt id="workers.convert.tasks.MergeConvertedPdfTask.execute_task">
+<code class="descname">execute_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/convert/tasks.html#MergeConvertedPdfTask.execute_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.convert.tasks.MergeConvertedPdfTask.execute_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the task.</p>
+<p>This method has to be implemented by all subclassed tasks and includes
+the actual implementation logic of the specific task.</p>
+<p>Results have to be dicts or lists of results and are merged recursively
+so that partial results in task chains accumulate and may be extended
+or modified by following tasks.</p>
+<p>Tasks do not have to return results, i.e. the result may be None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return dict:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="workers.convert.tasks.MergeConvertedPdfTask.name">
+<code class="descname">name</code><em class="property"> = 'convert.merge_converted_pdf'</em><a class="headerlink" href="#workers.convert.tasks.MergeConvertedPdfTask.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.convert.tasks.MergeConvertedPdfTask.rate_limit">
+<code class="descname">rate_limit</code><em class="property"> = None</em><a class="headerlink" href="#workers.convert.tasks.MergeConvertedPdfTask.rate_limit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.convert.tasks.MergeConvertedPdfTask.reject_on_worker_lost">
+<code class="descname">reject_on_worker_lost</code><em class="property"> = None</em><a class="headerlink" href="#workers.convert.tasks.MergeConvertedPdfTask.reject_on_worker_lost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers.convert">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-workers.convert" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/workers.convert.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

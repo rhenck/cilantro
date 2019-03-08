@@ -1,0 +1,30 @@
+workers.default.ojs package
+===========================
+
+Submodules
+----------
+
+workers.default.ojs.ojs\_api module
+-----------------------------------
+
+.. automodule:: workers.default.ojs.ojs_api
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+workers.default.ojs.tasks module
+--------------------------------
+
+.. automodule:: workers.default.ojs.tasks
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: workers.default.ojs
+    :members:
+    :undoc-members:
+    :show-inheritance:

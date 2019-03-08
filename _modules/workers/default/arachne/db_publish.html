@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>workers.default.arachne.db_publish &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for workers.default.arachne.db_publish</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="n">mysql</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="add_book"><a class="viewcode-back" href="../../../../workers.default.arachne.html#workers.default.arachne.db_publish.add_book">[docs]</a><span class="k">def</span> <span class="nf">add_book</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">object_id</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write book data to Arachne-Database.&quot;&quot;&quot;</span>
+    <span class="n">book_metadata</span> <span class="o">=</span> <span class="n">book</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="n">author_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">book_metadata</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">]:</span>
+        <span class="n">author_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{author[&#39;firstname&#39;]}</span><span class="s2"> </span><span class="si">{author[&#39;lastname&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">page_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">get_representation_dir</span><span class="p">(</span><span class="s1">&#39;origin&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">))</span>
+
+    <span class="n">book_query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;INSERT INTO arachne.buch&quot;</span>
+                  <span class="s2">&quot;(DatensatzGruppeBuch, BearbeiterBuch, creatienDateTime, &quot;</span>
+                  <span class="s2">&quot;creation, lastModified, Verzeichnis, &quot;</span>
+                  <span class="s2">&quot;KurzbeschreibungBuch, BuchAuthor, BuchTitel, BuchJahr, &quot;</span>
+                  <span class="s2">&quot;BuchSeiten, hasOcrText, hasMarcData) &quot;</span>
+                  <span class="s2">&quot;VALUES(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, &quot;</span>
+                  <span class="s2">&quot;CURRENT_TIMESTAMP, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">book_args</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Arachne&#39;</span><span class="p">,</span> <span class="n">username</span> <span class="o">+</span> <span class="s1">&#39; (via iDAI.workbench)&#39;</span><span class="p">,</span> <span class="n">object_id</span><span class="p">,</span>
+                 <span class="n">book_metadata</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">author_list</span><span class="p">),</span>
+                 <span class="n">book_metadata</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span> <span class="n">book_metadata</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">],</span> <span class="n">page_count</span><span class="p">,</span>
+                 <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mysql</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">book_query</span><span class="p">,</span> <span class="n">book_args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_pages"><a class="viewcode-back" href="../../../../workers.default.arachne.html#workers.default.arachne.db_publish.add_pages">[docs]</a><span class="k">def</span> <span class="nf">add_pages</span><span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">book_object</span><span class="p">,</span> <span class="n">object_id</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create database entries for pages and their images.</span>
+
+<span class="sd">    Entries in &#39;buchseite&#39; and &#39;marbilder&#39; for every page, by calling internal</span>
+<span class="sd">    methods &#39;_add_page_to_db&#39; and &#39;_add_image_to_db&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">book_object</span><span class="o">.</span><span class="n">get_representation_dir</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">)</span> <span class="o">+</span>
+                                 <span class="s1">&#39;/*&#39;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">file_list</span><span class="p">):</span>
+        <span class="n">new_filename</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="s2">&quot;BOOK-</span><span class="si">{object_id}</span><span class="s2">-{str(i)}_&quot;</span> <span class="o">+</span>
+                        <span class="n">f</span><span class="s2">&quot;{os.path.basename(file_path)}&quot;</span><span class="p">)</span>
+
+        <span class="n">page_id</span> <span class="o">=</span> <span class="n">_add_page_to_db</span><span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+        <span class="n">_add_image_to_db</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">book_id</span><span class="p">,</span> <span class="n">page_id</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_add_page_to_db</span><span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">page_index</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create row for image in table &#39;buchseite&#39;.&quot;&quot;&quot;</span>
+    <span class="n">page_query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;INSERT INTO arachne.buchseite&quot;</span>
+                  <span class="s2">&quot;(FS_BuchID, DatensatzGruppeBuchseite, BearbeiterBuchseite, &quot;</span>
+                  <span class="s2">&quot;creatienDateTime, creation, lastModified, &quot;</span>
+                  <span class="s2">&quot;seite, seite_natuerlich, image, version) &quot;</span>
+                  <span class="s2">&quot;VALUES(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, &quot;</span>
+                  <span class="s2">&quot;CURRENT_TIMESTAMP, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">page_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="s1">&#39;Arachne&#39;</span><span class="p">,</span> <span class="n">username</span> <span class="o">+</span> <span class="s1">&#39; (via iDAI.workbench)&#39;</span><span class="p">,</span>
+                 <span class="n">page_index</span><span class="p">,</span> <span class="n">page_index</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mysql</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">page_query</span><span class="p">,</span> <span class="n">page_args</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_add_image_to_db</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">book_id</span><span class="p">,</span> <span class="n">page_id</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create row for image in table &#39;marbilder&#39;.&quot;&quot;&quot;</span>
+    <span class="n">page_image_query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;INSERT INTO arachne.marbilder&quot;</span>
+                        <span class="s2">&quot;(FS_BuchID, FS_BuchseiteID, Dateiformat, &quot;</span>
+                        <span class="s2">&quot;Dateigroesse, erstellt, geaendert, &quot;</span>
+                        <span class="s2">&quot;DateinameMarbilder, BestandsnameMarbilder, Pfad, &quot;</span>
+                        <span class="s2">&quot;PfadNeu)&quot;</span>
+                        <span class="s2">&quot;VALUES(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, CURRENT_TIMESTAMP, &quot;</span>
+                        <span class="s2">&quot;CURRENT_TIMESTAMP, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">folder_name</span> <span class="o">=</span> <span class="n">_generate_folder_name</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">book_id</span><span class="p">)</span>
+    <span class="n">relative_ptif_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;bookscans&#39;</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">,</span>
+                                      <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span>
+                                      <span class="s1">&#39;.ptif&#39;</span><span class="p">)</span>
+    <span class="n">file_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span> <span class="o">+</span> <span class="mi">1000</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">//</span> <span class="mi">1000</span>
+    <span class="n">image_path</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;http://arachne.uni-koeln.de/images/stichwerke/&quot;</span> <span class="o">+</span>
+                  <span class="n">folder_name</span> <span class="o">+</span>
+                  <span class="s2">&quot;/&quot;</span> <span class="o">+</span>
+                  <span class="n">new_filename</span><span class="p">)</span>
+    <span class="n">page_image_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">book_id</span><span class="p">,</span> <span class="n">page_id</span><span class="p">,</span> <span class="s1">&#39;jpg&#39;</span><span class="p">,</span> <span class="n">file_size</span><span class="p">,</span> <span class="n">new_filename</span><span class="p">,</span>
+                       <span class="n">object_id</span><span class="p">,</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">relative_ptif_path</span><span class="p">)</span>
+    <span class="n">mysql</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">page_image_query</span><span class="p">,</span> <span class="n">page_image_args</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_folder_name</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">book_id</span><span class="p">):</span>
+    <span class="n">formatted_book_id</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:06d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">book_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;BOOK-ZID</span><span class="si">{object_id}</span><span class="s2">-AraID</span><span class="si">{formatted_book_id}</span><span class="s2">&quot;</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

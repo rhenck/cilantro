@@ -1,0 +1,86 @@
+test.unit.worker.convert package
+================================
+
+Submodules
+----------
+
+test.unit.worker.convert.convert\_test module
+---------------------------------------------
+
+.. automodule:: test.unit.worker.convert.convert_test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_convert\_image module
+----------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_convert_image
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_cut\_pdf module
+----------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_cut_pdf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_jpg\_to\_pdf module
+--------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_jpg_to_pdf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_pdf\_to\_tif module
+--------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_pdf_to_tif
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_pdf\_to\_txt module
+--------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_pdf_to_txt
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_tif\_to\_jpg module
+--------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_tif_to_jpg
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_tif\_to\_ptif module
+---------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_tif_to_ptif
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.convert.test\_tif\_to\_txt module
+--------------------------------------------------
+
+.. automodule:: test.unit.worker.convert.test_tif_to_txt
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.worker.convert
+    :members:
+    :undoc-members:
+    :show-inheritance:

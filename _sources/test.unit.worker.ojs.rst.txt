@@ -1,0 +1,30 @@
+test.unit.worker.ojs package
+============================
+
+Submodules
+----------
+
+test.unit.worker.ojs.test\_generate\_frontmatter module
+-------------------------------------------------------
+
+.. automodule:: test.unit.worker.ojs.test_generate_frontmatter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.ojs.test\_publish\_to\_ojs module
+--------------------------------------------------
+
+.. automodule:: test.unit.worker.ojs.test_publish_to_ojs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.worker.ojs
+    :members:
+    :undoc-members:
+    :show-inheritance:

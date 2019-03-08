@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>utils.job_db &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for utils.job_db</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">pymongo</span> <span class="k">import</span> <span class="n">MongoClient</span><span class="p">,</span> <span class="n">DESCENDING</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;JOB_DB_URL&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;JOB_DB_PORT&#39;</span><span class="p">]))</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;JOB_DB_NAME&#39;</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="create_index"><a class="viewcode-back" href="../../utils.html#utils.job_db.create_index">[docs]</a><span class="k">def</span> <span class="nf">create_index</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create index for faster lookup in database.</span>
+
+<span class="sd">    The 2 fields that are used for lookup/update are indexed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">create_index</span><span class="p">([(</span><span class="s2">&quot;job_id&quot;</span><span class="p">,</span> <span class="n">DESCENDING</span><span class="p">),</span>
+                          <span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">DESCENDING</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="get_jobs_for_user"><a class="viewcode-back" href="../../utils.html#utils.job_db.get_jobs_for_user">[docs]</a><span class="k">def</span> <span class="nf">get_jobs_for_user</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find all jobs of the passed user in the job database.</span>
+
+<span class="sd">    :param str user: username to find jobs belonging to</span>
+<span class="sd">    :return: list of job objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">job_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}):</span>
+        <span class="n">job_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">job_list</span></div>
+
+
+<div class="viewcode-block" id="get_job_by_id"><a class="viewcode-back" href="../../utils.html#utils.job_db.get_job_by_id">[docs]</a><span class="k">def</span> <span class="nf">get_job_by_id</span><span class="p">(</span><span class="n">job_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find job with the given job_id.</span>
+
+<span class="sd">    :param str job_id: job-id to be queried</span>
+<span class="sd">    :return: job object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="n">job_id</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">job</span></div>
+
+
+<div class="viewcode-block" id="add_job"><a class="viewcode-back" href="../../utils.html#utils.job_db.add_job">[docs]</a><span class="k">def</span> <span class="nf">add_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">job_type</span><span class="p">,</span> <span class="n">task_ids</span><span class="p">,</span> <span class="n">job_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a job to the job database.</span>
+
+<span class="sd">    :param str job_id: Cilantro-ID of the job</span>
+<span class="sd">    :param str user: username which started the job</span>
+<span class="sd">    :param str job_type: type of job, i.e. &#39;ingest_journal&#39;</span>
+<span class="sd">    :param list task_ids: Cilantro-IDs of all tasks belonging to that job</span>
+<span class="sd">    :param dict job_params: Original paramters given when the job was created</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;job_id&#39;</span><span class="p">:</span> <span class="n">job_id</span><span class="p">,</span>
+           <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
+           <span class="s1">&#39;job_type&#39;</span><span class="p">:</span> <span class="n">job_type</span><span class="p">,</span>
+           <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">_generate_job_name</span><span class="p">(</span><span class="n">job_type</span><span class="p">,</span> <span class="n">job_params</span><span class="p">),</span>
+           <span class="s1">&#39;task_ids&#39;</span><span class="p">:</span> <span class="n">task_ids</span><span class="p">,</span>
+           <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;new&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;created&#39;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+           <span class="s1">&#39;updated&#39;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+           <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">job_params</span><span class="p">,</span>
+           <span class="s1">&#39;errors&#39;</span><span class="p">:</span> <span class="p">[]</span>
+           <span class="p">}</span>
+
+    <span class="n">db</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">job</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="update_job"><a class="viewcode-back" href="../../utils.html#utils.job_db.update_job">[docs]</a><span class="k">def</span> <span class="nf">update_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update a job to the job database with new state and updated timestamp.</span>
+
+<span class="sd">    If there is an error object passed then that is added to the list</span>
+<span class="sd">    of errors of that task. The errors are a list to  make it</span>
+<span class="sd">    possible to keep executing the task chain even though some tasks</span>
+<span class="sd">    throw errors. The errors are put into the job entry in the database</span>
+<span class="sd">    and can be collected later.</span>
+
+<span class="sd">    :param str job_id: Cilantro-ID of the job</span>
+<span class="sd">    :param str state: new state of the job</span>
+<span class="sd">    :param dict error: (optional) dict containig task name and error message</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">update_many</span><span class="p">({</span><span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="n">job_id</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s1">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span> <span class="s1">&#39;updated&#39;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">}})</span>
+    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">update_many</span><span class="p">({</span><span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="n">job_id</span><span class="p">},</span>
+                            <span class="p">{</span><span class="s1">&#39;$push&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;errors&#39;</span><span class="p">:</span> <span class="n">error</span><span class="p">}})</span></div>
+
+
+<span class="k">def</span> <span class="nf">_generate_job_name</span><span class="p">(</span><span class="n">job_type</span><span class="p">,</span> <span class="n">job_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate job name based on job type and (first) file name.</span>
+
+<span class="sd">    The job name is generated by appending the first file name of the</span>
+<span class="sd">    files object if available. Otherwise the first file name of the</span>
+<span class="sd">    first part is used.</span>
+
+<span class="sd">    :param str job_type: type of the job</span>
+<span class="sd">    :param list job_params: parameters of the job</span>
+<span class="sd">    :return str: name of the job</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">job_params</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">]:</span>
+        <span class="n">first_file_name</span> <span class="o">=</span> <span class="n">job_params</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">first_file_name</span> <span class="o">=</span> <span class="n">job_params</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;JOB-</span><span class="si">{job_type}</span><span class="s2">-</span><span class="si">{first_file_name}</span><span class="s2">&quot;</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

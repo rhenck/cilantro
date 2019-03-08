@@ -1,0 +1,400 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.integration package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="test-integration-package">
+<h1>test.integration package<a class="headerlink" href="#test-integration-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-test.integration.job_type_test">
+<span id="test-integration-job-type-test-module"></span><h2>test.integration.job_type_test module<a class="headerlink" href="#module-test.integration.job_type_test" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.integration.job_type_test.JobTypeTest">
+<em class="property">class </em><code class="descclassname">test.integration.job_type_test.</code><code class="descname">JobTypeTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.archaeocloud_dir">
+<code class="descname">archaeocloud_dir</code><em class="property"> = 'archaeocloud_test_dir'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.archaeocloud_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.archive_dir">
+<code class="descname">archive_dir</code><em class="property"> = 'archaeocloud_test_dir/historical-books-archive/DAI'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.archive_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.assert_file_in_repository">
+<code class="descname">assert_file_in_repository</code><span class="sig-paren">(</span><em>object_id</em>, <em>file_path</em>, <em>timeout='DEFAULT_TEST_TIMEOUT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.assert_file_in_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.assert_file_in_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that a file is present in the repository.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the cilantro object</li>
+<li><strong>file_path</strong> (<em>str</em>) – Path of the file to assert</li>
+<li><strong>timeout</strong> (<em>str</em>) – Name of timeout in ENV file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.assert_job_successful">
+<code class="descname">assert_job_successful</code><span class="sig-paren">(</span><em>task_ids</em>, <em>timeout='DEFAULT_TEST_TIMEOUT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.assert_job_successful"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.assert_job_successful" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that a job completed successfully.</p>
+<p>Fails if one of the tasks given is in failure state or when wait time
+is reached.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>task_ids</strong> (<em>list</em>) – List of ids of tasks</li>
+<li><strong>timeout</strong> (<em>str</em>) – Name of timeout in ENV file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.assert_status">
+<code class="descname">assert_status</code><span class="sig-paren">(</span><em>job_id</em>, <em>expected_status</em>, <em>timeout='DEFAULT_TEST_TIMEOUT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.assert_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.assert_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that a job has a certain status.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>job_id</strong> (<em>str</em>) – The id of the job</li>
+<li><strong>expected_status</strong> (<em>str</em>) – The expected status of the job</li>
+<li><strong>timeout</strong> (<em>str</em>) – Name of timeout in ENV file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.bookscan_dir">
+<code class="descname">bookscan_dir</code><em class="property"> = 'archaeocloud_test_dir/aronscans/bookscans'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.bookscan_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.get_status">
+<code class="descname">get_status</code><span class="sig-paren">(</span><em>job_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.get_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.get_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the job status.</p>
+<p>This includes the status string and an optional result object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job_id</strong> (<em>str</em>) – The id of the job</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return dict:</th><td class="field-body">The response data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.load_params_from_file">
+<code class="descname">load_params_from_file</code><span class="sig-paren">(</span><em>folder</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.load_params_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.load_params_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load job params from a JSON file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folder</strong> (<em>str</em>) – The source folder</li>
+<li><strong>path</strong> (<em>str</em>) – The relative path to the JSON file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The parsed JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.mets_dir">
+<code class="descname">mets_dir</code><em class="property"> = 'archaeocloud_test_dir/S-Arachne/MetsDocuments'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.mets_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.pdf_dir">
+<code class="descname">pdf_dir</code><em class="property"> = 'archaeocloud_test_dir/aronscans/download-book'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.pdf_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.post_job">
+<code class="descname">post_job</code><span class="sig-paren">(</span><em>job_type</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.post_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.post_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new job.</p>
+<p>The result object contains the job_id for the new job that can be used
+to query the status and result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>job_type</strong> (<em>str</em>) – The type of the job</li>
+<li><strong>data</strong> – Parameters passed to the job</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return tuple:</th><td class="field-body"><p class="first last">The result object and the HTTP status code</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.ptif_dir">
+<code class="descname">ptif_dir</code><em class="property"> = 'archaeocloud_test_dir/S-Arachne/arachne4scans/arachne4webimages/bookscans'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.ptif_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.remove_object_from_repository">
+<code class="descname">remove_object_from_repository</code><span class="sig-paren">(</span><em>object_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.remove_object_from_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.remove_object_from_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an object from the repository.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object_id</strong> (<em>str</em>) – The id of the object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.repository_dir">
+<code class="descname">repository_dir</code><em class="property"> = '/data/repository'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.repository_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.resource_dir">
+<code class="descname">resource_dir</code><em class="property"> = 'test/resources'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.resource_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.stage_resource">
+<code class="descname">stage_resource</code><span class="sig-paren">(</span><em>folder</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.stage_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.stage_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a resource (file oder folder) to the staging folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>folder</strong> (<em>str</em>) – The source folder</li>
+<li><strong>path</strong> (<em>str</em>) – The relative path to the resource</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.staging_dir">
+<code class="descname">staging_dir</code><em class="property"> = '/data/staging'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.staging_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.tei_dir">
+<code class="descname">tei_dir</code><em class="property"> = 'archaeocloud_test_dir/S-Arachne/TeiDocuments'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.tei_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.job_type_test.JobTypeTest.unstage_resource">
+<code class="descname">unstage_resource</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/job_type_test.html#JobTypeTest.unstage_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.unstage_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a resource (file or folder) from the staging folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The relative path to the resource in the staging dir</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.job_type_test.JobTypeTest.working_dir">
+<code class="descname">working_dir</code><em class="property"> = '/data/workspace'</em><a class="headerlink" href="#test.integration.job_type_test.JobTypeTest.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.integration.test_ingest_book">
+<span id="test-integration-test-ingest-book-module"></span><h2>test.integration.test_ingest_book module<a class="headerlink" href="#module-test.integration.test_ingest_book" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.integration.test_ingest_book.IngestBookTest">
+<em class="property">class </em><code class="descclassname">test.integration.test_ingest_book.</code><code class="descname">IngestBookTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/test_ingest_book.html#IngestBookTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.test_ingest_book.IngestBookTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.integration.job_type_test.JobTypeTest" title="test.integration.job_type_test.JobTypeTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.integration.job_type_test.JobTypeTest</span></code></a></p>
+<p>Test ingest-book task.</p>
+<p>Creates a task from example data in the test-resource folder
+and makes some checks for generated files.</p>
+<p>Cleans up any generated files and database entries.</p>
+<dl class="method">
+<dt id="test.integration.test_ingest_book.IngestBookTest.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/test_ingest_book.html#IngestBookTest.tearDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.test_ingest_book.IngestBookTest.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleanup after test run.</p>
+<p>Remove created database entries, staging files and repository object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.integration.test_ingest_book.IngestBookTest.test_object_id">
+<code class="descname">test_object_id</code><em class="property"> = 'test_object_2342'</em><a class="headerlink" href="#test.integration.test_ingest_book.IngestBookTest.test_object_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.integration.test_ingest_book.IngestBookTest.test_success">
+<code class="descname">test_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/test_ingest_book.html#IngestBookTest.test_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.test_ingest_book.IngestBookTest.test_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test ingest book task chain.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.integration.test_ingest_journal">
+<span id="test-integration-test-ingest-journal-module"></span><h2>test.integration.test_ingest_journal module<a class="headerlink" href="#module-test.integration.test_ingest_journal" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.integration.test_ingest_journal.IngestJournalTest">
+<em class="property">class </em><code class="descclassname">test.integration.test_ingest_journal.</code><code class="descname">IngestJournalTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/test_ingest_journal.html#IngestJournalTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.test_ingest_journal.IngestJournalTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.integration.job_type_test.JobTypeTest" title="test.integration.job_type_test.JobTypeTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.integration.job_type_test.JobTypeTest</span></code></a></p>
+<dl class="method">
+<dt id="test.integration.test_ingest_journal.IngestJournalTest.test_do_ocr">
+<code class="descname">test_do_ocr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/test_ingest_journal.html#IngestJournalTest.test_do_ocr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.test_ingest_journal.IngestJournalTest.test_do_ocr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test ingest journal functionality with OCR tasks enabled.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.integration.test_ingest_journal.IngestJournalTest.test_no_ocr">
+<code class="descname">test_no_ocr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/integration/test_ingest_journal.html#IngestJournalTest.test_no_ocr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.integration.test_ingest_journal.IngestJournalTest.test_no_ocr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test ingest journal functionality without OCR tasks.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.integration">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-test.integration" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/test.integration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

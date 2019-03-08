@@ -1,0 +1,393 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>service.job.job_type_controller &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for service.job.job_type_controller</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span>
+
+<span class="kn">from</span> <span class="nn">service.errors</span> <span class="k">import</span> <span class="n">ApiError</span>
+
+<span class="n">job_type_controller</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;job_types&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">config_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;CONFIG_DIR&#39;</span><span class="p">]</span>
+<span class="n">job_types_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_dir</span><span class="p">,</span> <span class="s1">&#39;job_types&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_job_types"><a class="viewcode-back" href="../../../service.job.html#service.job.job_type_controller.get_job_types">[docs]</a><span class="nd">@job_type_controller</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_job_types</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a JSON list of available job types and their meta information.</span>
+
+<span class="sd">    .. :quickref: Job Type Controller; List of job types and meta information</span>
+
+<span class="sd">    **Example request**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">      GET /job_types/ HTTP/1.1</span>
+
+<span class="sd">    **Example response**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 200 OK</span>
+
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;about&quot;: {</span>
+<span class="sd">                    &quot;description&quot;: &quot;Create a new Issue of an existing</span>
+<span class="sd">                                    journal, and upload it&#39;s files to</span>
+<span class="sd">                                    iDAI.publications/journals&quot;,</span>
+<span class="sd">                    &quot;tags&quot;: [</span>
+<span class="sd">                        &quot;OJS&quot;,</span>
+<span class="sd">                        &quot;iDAI.publications/journals&quot;,</span>
+<span class="sd">                        &quot;publish&quot;,</span>
+<span class="sd">                        &quot;journal&quot;,</span>
+<span class="sd">                        &quot;pdf&quot;</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    &quot;title&quot;: &quot;Ingest a Journal-Issue to</span>
+<span class="sd">                              iDAI.publications/journals&quot;</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;name&quot;: &quot;ingest_journal&quot;</span>
+<span class="sd">            },</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;about&quot;: {</span>
+<span class="sd">                    &quot;description&quot;: &quot;Create a new Book afrom single image</span>
+<span class="sd">                                    files nd upload it to iDAI.repository&quot;,</span>
+<span class="sd">                    &quot;tags&quot;: [</span>
+<span class="sd">                        &quot;repository&quot;,</span>
+<span class="sd">                        &quot;book&quot;,</span>
+<span class="sd">                        &quot;monography&quot;,</span>
+<span class="sd">                        &quot;image&quot;,</span>
+<span class="sd">                        &quot;tiff&quot;</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    &quot;title&quot;: &quot;Ingest a complete book to iDAI.repository&quot;</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;name&quot;: &quot;ingest_book&quot;</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+
+<span class="sd">    :reqheader Accept: application/json</span>
+
+<span class="sd">    :resheader Content-Type: application/json</span>
+<span class="sd">    :&gt;json dict: operation result</span>
+<span class="sd">    :status 200: OK</span>
+
+<span class="sd">    :return str: JSON list of objecta containing the type names and</span>
+<span class="sd">                 the about information from the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">job_types</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">job_type_file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">job_types_dir</span> <span class="o">+</span> <span class="s1">&#39;/*.yml&#39;</span><span class="p">):</span>
+        <span class="n">job_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">job_type_file</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">job_type_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">job_file_yaml</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="n">job_meta</span> <span class="o">=</span> <span class="n">job_file_yaml</span><span class="p">[</span><span class="s1">&#39;about&#39;</span><span class="p">]</span>
+        <span class="n">job_types</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">job_name</span><span class="p">,</span>
+                          <span class="s1">&#39;about&#39;</span><span class="p">:</span> <span class="n">job_meta</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">job_types</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_job_type_detail"><a class="viewcode-back" href="../../../service.job.html#service.job.job_type_controller.get_job_type_detail">[docs]</a><span class="nd">@job_type_controller</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;&lt;job_type&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_job_type_detail</span><span class="p">(</span><span class="n">job_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serve the contents of the YAML file for the job type definition.</span>
+
+<span class="sd">    .. :quickref: Job Type Controller; Contents of the job type definition file</span>
+
+<span class="sd">    **Example request**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">      GET /job_types/&lt;job_type&gt; HTTP/1.1</span>
+
+<span class="sd">    **Example response**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 200 OK</span>
+
+<span class="sd">        {</span>
+<span class="sd">            &quot;about&quot;: {</span>
+<span class="sd">                &quot;description&quot;: &quot;Create a new Issue of an existing journal</span>
+<span class="sd">                                and upload it&#39;s files to</span>
+<span class="sd">                                iDAI.publications/journals&quot;,</span>
+<span class="sd">                &quot;tags&quot;: [</span>
+<span class="sd">                    &quot;OJS&quot;,</span>
+<span class="sd">                    &quot;iDAI.publications/journals&quot;,</span>
+<span class="sd">                    &quot;publish&quot;,</span>
+<span class="sd">                    &quot;journal&quot;,</span>
+<span class="sd">                    &quot;pdf&quot;</span>
+<span class="sd">                ],</span>
+<span class="sd">                &quot;title&quot;: &quot;Ingest a Journal-Issue to iDAI.publications/journals&quot;</span>
+<span class="sd">            },</span>
+<span class="sd">            &quot;schema&quot;: {</span>
+<span class="sd">                &quot;$schema&quot;: &quot;http://json-schema.org/draft-07/schema#&quot;,</span>
+<span class="sd">                &quot;title&quot;: &quot;Ingest Journal schema&quot;,</span>
+<span class="sd">                &quot;description&quot;: &quot;Use to validate ingest-journal job parameters&quot;,</span>
+<span class="sd">                &quot;type&quot;: &quot;object&quot;</span>
+<span class="sd">                &quot;additionalProperties&quot;: false,</span>
+<span class="sd">                &quot;properties&quot;: {</span>
+<span class="sd">                    &quot;metadata&quot;: {</span>
+<span class="sd">                        &quot;additionalProperties&quot;: false,</span>
+<span class="sd">                        &quot;properties&quot;: {</span>
+<span class="sd">                            &quot;description&quot;: {</span>
+<span class="sd">                                &quot;type&quot;: &quot;string&quot;</span>
+<span class="sd">                            },</span>
+<span class="sd">                            &quot;identification&quot;: {</span>
+<span class="sd">                                &quot;type&quot;: &quot;string&quot;</span>
+<span class="sd">                            }</span>
+<span class="sd">                        },</span>
+<span class="sd">                        &quot;required&quot;: [</span>
+<span class="sd">                            &quot;description&quot;,</span>
+<span class="sd">                            &quot;identification&quot;</span>
+<span class="sd">                        ],</span>
+<span class="sd">                        &quot;type&quot;: &quot;object&quot;</span>
+<span class="sd">                    }</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;required&quot;: [</span>
+<span class="sd">                    &quot;metadata&quot;</span>
+<span class="sd">                ]</span>
+<span class="sd">            },</span>
+<span class="sd">            &quot;tasks&quot;: [</span>
+<span class="sd">                &quot;create_object&quot;,</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;foreach&quot;: [</span>
+<span class="sd">                        {</span>
+<span class="sd">                            &quot;do&quot;: [</span>
+<span class="sd">                                {</span>
+<span class="sd">                                    &quot;foreach&quot;: {</span>
+<span class="sd">                                        &quot;target&quot;: &quot;tif&quot;,</span>
+<span class="sd">                                        &quot;task&quot;: &quot;convert.pdf_to_tif&quot;</span>
+<span class="sd">                                    },</span>
+<span class="sd">                                    &quot;list_files&quot;: &quot;origin&quot;,</span>
+<span class="sd">                                    &quot;pattern&quot;: &quot;.pdf$&quot;</span>
+<span class="sd">                                },</span>
+<span class="sd">                                {</span>
+<span class="sd">                                    &quot;foreach&quot;: {</span>
+<span class="sd">                                        &quot;target&quot;: &quot;txt&quot;,</span>
+<span class="sd">                                        &quot;task&quot;: &quot;convert.tif_to_txt&quot;</span>
+<span class="sd">                                    },</span>
+<span class="sd">                                    &quot;list_files&quot;: &quot;tif&quot;</span>
+<span class="sd">                                },</span>
+<span class="sd">                                {</span>
+<span class="sd">                                    &quot;foreach&quot;: {</span>
+<span class="sd">                                        &quot;target&quot;: &quot;jpg&quot;,</span>
+<span class="sd">                                        &quot;task&quot;: &quot;convert.tif_to_jpg&quot;</span>
+<span class="sd">                                    },</span>
+<span class="sd">                                    &quot;list_files&quot;: &quot;tif&quot;</span>
+<span class="sd">                                }</span>
+<span class="sd">                            ],</span>
+<span class="sd">                            &quot;else&quot;: [</span>
+<span class="sd">                                {</span>
+<span class="sd">                                    &quot;foreach&quot;: {</span>
+<span class="sd">                                        &quot;target&quot;: &quot;txt&quot;,</span>
+<span class="sd">                                        &quot;task&quot;: &quot;convert.pdf_to_txt&quot;</span>
+<span class="sd">                                    },</span>
+<span class="sd">                                    &quot;list_files&quot;: &quot;origin&quot;,</span>
+<span class="sd">                                    &quot;pattern&quot;: &quot;.pdf$&quot;</span>
+<span class="sd">                                }</span>
+<span class="sd">                            ],</span>
+<span class="sd">                            &quot;if&quot;: &quot;do_ocr&quot;</span>
+<span class="sd">                        },</span>
+<span class="sd">                        {</span>
+<span class="sd">                            &quot;source&quot;: &quot;txt&quot;,</span>
+<span class="sd">                            &quot;task&quot;: &quot;nlp.annotate&quot;</span>
+<span class="sd">                        }</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    &quot;list_parts&quot;: null</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;foreach&quot;: {</span>
+<span class="sd">                        &quot;foreach&quot;: {</span>
+<span class="sd">                            &quot;max_height&quot;: 50,</span>
+<span class="sd">                            &quot;max_width&quot;: 50,</span>
+<span class="sd">                            &quot;target_dir&quot;: &quot;thumbnails&quot;,</span>
+<span class="sd">                            &quot;task&quot;: &quot;convert.scale_image&quot;</span>
+<span class="sd">                        },</span>
+<span class="sd">                        &quot;list_files&quot;: &quot;jpg&quot;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;list_parts&quot;: null</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;foreach&quot;: {</span>
+<span class="sd">                        &quot;foreach&quot;: {</span>
+<span class="sd">                            &quot;max_height&quot;: 50,</span>
+<span class="sd">                            &quot;max_width&quot;: 50,</span>
+<span class="sd">                            &quot;task&quot;: &quot;convert.scale_image&quot;</span>
+<span class="sd">                        },</span>
+<span class="sd">                        &quot;list_files&quot;: &quot;tif&quot;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;list_parts&quot;: null</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;dtd_file&quot;: &quot;ojs_import.dtd&quot;,</span>
+<span class="sd">                    &quot;params&quot;: &quot;ojs_metadata&quot;,</span>
+<span class="sd">                    &quot;target_filename&quot;: &quot;ojs_import.xml&quot;,</span>
+<span class="sd">                    &quot;task&quot;: &quot;generate_xml&quot;,</span>
+<span class="sd">                    &quot;template_file&quot;: &quot;ojs_template.xml&quot;</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;foreach&quot;: {</span>
+<span class="sd">                        &quot;schema_file&quot;: &quot;MARC21slim.xsd&quot;,</span>
+<span class="sd">                        &quot;target_filename&quot;: &quot;marc.xml&quot;,</span>
+<span class="sd">                        &quot;task&quot;: &quot;generate_xml&quot;,</span>
+<span class="sd">                        &quot;template_file&quot;: &quot;marc_template.xml&quot;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;list_parts&quot;: null</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;foreach&quot;: {</span>
+<span class="sd">                        &quot;schema_file&quot;: &quot;mets.xsd&quot;,</span>
+<span class="sd">                        &quot;target_filename&quot;: &quot;mets.xml&quot;,</span>
+<span class="sd">                        &quot;task&quot;: &quot;generate_xml&quot;,</span>
+<span class="sd">                        &quot;template_file&quot;: &quot;mets_template.xml&quot;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;list_parts&quot;: null</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;params&quot;: &quot;ojs_metadata&quot;,</span>
+<span class="sd">                    &quot;task&quot;: &quot;publish_to_ojs&quot;</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;foreach&quot;: {</span>
+<span class="sd">                        &quot;task&quot;: &quot;generate_frontmatter&quot;</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &quot;list_parts&quot;: null</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;publish_to_repository&quot;,</span>
+<span class="sd">                &quot;cleanup_workdir&quot;,</span>
+<span class="sd">                &quot;finish_job&quot;</span>
+<span class="sd">            ]</span>
+<span class="sd">        }</span>
+
+<span class="sd">    :reqheader Accept: application/json</span>
+<span class="sd">    :param str job_type: Name of the job type</span>
+<span class="sd">    :query schema: (optional) if set to &#39;true&#39;, parameter schema is served</span>
+
+<span class="sd">    :resheader Content-Type: application/json</span>
+<span class="sd">    :&gt;json dict: operation result</span>
+<span class="sd">    :status 200: OK</span>
+
+<span class="sd">    :return: YAML file content of the job type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">job_types_dir</span><span class="p">,</span> <span class="n">job_type</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">job_type_def</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="n">schema_requested</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;schema&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">schema_requested</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+            <span class="n">schema_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">job_types_dir</span><span class="p">,</span> <span class="s1">&#39;schemas&#39;</span><span class="p">,</span>
+                                       <span class="n">job_type</span> <span class="o">+</span> <span class="s1">&#39;_schema.json&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">schema_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">schema_file</span><span class="p">:</span>
+                <span class="n">job_type_def</span><span class="p">[</span><span class="s1">&#39;schema&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">schema_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">job_type_def</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ApiError</span><span class="p">(</span>
+            <span class="s2">&quot;job_type_not_found&quot;</span><span class="p">,</span>
+            <span class="n">f</span><span class="s2">&quot;No definition for given job type &#39;</span><span class="si">{job_type}</span><span class="s2">&#39; found&quot;</span><span class="p">,</span>
+            <span class="mi">404</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

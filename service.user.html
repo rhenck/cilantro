@@ -1,0 +1,192 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>service.user package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="service-user-package">
+<h1>service.user package<a class="headerlink" href="#service-user-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-service.user.user_controller">
+<span id="service-user-user-controller-module"></span><h2>service.user.user_controller module<a class="headerlink" href="#module-service.user.user_controller" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="service.user.user_controller.get_user">
+<code class="descclassname">service.user.user_controller.</code><code class="descname">get_user</code><span class="sig-paren">(</span><em>user_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/user/user_controller.html#get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.user.user_controller.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the user information for the given user name.</p>
+<p>This endpoint can also be used implement authentication since only logged
+in users are allowed to retrieve their user info.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/user/&lt;username&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response SUCCESS</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;success&quot;: true,
+    &quot;user&quot;: {
+        &quot;user_name&quot;: &quot;test_user&quot;
+    }
+}
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">403</span> <span class="ne">FORBIDDEN</span>
+
+{
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Accept:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">application/json</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_name</strong> (<em>str</em>) – name of the user</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Resheader Content-Type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">application/json</td>
+</tr>
+<tr class="field-even field"><th class="field-name">&gt;json dict:</th><td class="field-body">operation result</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status 200:</th><td class="field-body">OK</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON object representing the user</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-service.user.user_service">
+<span id="service-user-user-service-module"></span><h2>service.user.user_service module<a class="headerlink" href="#module-service.user.user_service" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="service.user.user_service.verify_password">
+<code class="descclassname">service.user.user_service.</code><code class="descname">verify_password</code><span class="sig-paren">(</span><em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/user/user_service.html#verify_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.user.user_service.verify_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify if the given password is valid for the given user.</p>
+<p>Checks against the bcrypt hashed password stored in the users config.</p>
+<p>Gets called internally by flask_httpauth.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str</em>) – </li>
+<li><strong>password</strong> (<em>str</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return Boolean:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-service.user">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-service.user" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/service.user.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

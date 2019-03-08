@@ -1,0 +1,22 @@
+test.unit.service.staging package
+=================================
+
+Submodules
+----------
+
+test.unit.service.staging.test\_staging\_controller module
+----------------------------------------------------------
+
+.. automodule:: test.unit.service.staging.test_staging_controller
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.service.staging
+    :members:
+    :undoc-members:
+    :show-inheritance:

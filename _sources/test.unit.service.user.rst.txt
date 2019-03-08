@@ -1,0 +1,30 @@
+test.unit.service.user package
+==============================
+
+Submodules
+----------
+
+test.unit.service.user.test\_user\_controller module
+----------------------------------------------------
+
+.. automodule:: test.unit.service.user.test_user_controller
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.service.user.user\_utils module
+-----------------------------------------
+
+.. automodule:: test.unit.service.user.user_utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.service.user
+    :members:
+    :undoc-members:
+    :show-inheritance:

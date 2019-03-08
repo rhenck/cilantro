@@ -1,0 +1,131 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.unit.worker.convert.test_tif_to_jpg &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for test.unit.worker.convert.test_tif_to_jpg</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">test.unit.worker.convert.convert_test</span> <span class="k">import</span> <span class="n">ConvertTest</span>
+<span class="kn">from</span> <span class="nn">workers.convert.convert_image</span> <span class="k">import</span> <span class="n">convert_tif_to_jpg</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TifToJpgTest"><a class="viewcode-back" href="../../../../../test.unit.worker.convert.html#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest">[docs]</a><span class="k">class</span> <span class="nc">TifToJpgTest</span><span class="p">(</span><span class="n">ConvertTest</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TifToJpgTest.setUp"><a class="viewcode-back" href="../../../../../test.unit.worker.convert.html#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tif_path</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.resource_dir}</span><span class="s1">/files/test.tif&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broken_tif_path</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.resource_dir}</span><span class="s1">/files/broken.tif&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jpg_path</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.working_dir}</span><span class="s1">/test.jpg&#39;</span></div>
+
+<div class="viewcode-block" id="TifToJpgTest.test_success"><a class="viewcode-back" href="../../../../../test.unit.worker.convert.html#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.test_success">[docs]</a>    <span class="k">def</span> <span class="nf">test_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">convert_tif_to_jpg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tif_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">jpg_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jpg_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">())</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jpg_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">stat</span><span class="o">.</span><span class="n">st_size</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TifToJpgTest.test_error"><a class="viewcode-back" href="../../../../../test.unit.worker.convert.html#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.test_error">[docs]</a>    <span class="k">def</span> <span class="nf">test_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">convert_tif_to_jpg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">broken_tif_path</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">jpg_path</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

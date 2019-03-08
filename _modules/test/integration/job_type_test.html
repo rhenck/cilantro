@@ -1,0 +1,338 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.integration.job_type_test &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for test.integration.job_type_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">json</span> <span class="k">import</span> <span class="n">JSONDecodeError</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="nn">service.run_service</span> <span class="k">import</span> <span class="n">app</span>
+<span class="kn">from</span> <span class="nn">utils.repository</span> <span class="k">import</span> <span class="n">generate_repository_path</span>
+<span class="kn">from</span> <span class="nn">test.unit.service.user.user_utils</span> <span class="k">import</span> <span class="n">get_auth_header</span><span class="p">,</span> <span class="n">test_user</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">retry_time</span> <span class="o">=</span> <span class="mi">100</span>
+
+
+<span class="k">def</span> <span class="nf">_assert_wait_time</span><span class="p">(</span><span class="n">waited</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">waited</span> <span class="o">&gt;</span> <span class="n">wait_time</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span> <span class="o">*</span> <span class="n">retry_time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">waited</span> <span class="o">+</span> <span class="n">retry_time</span>
+
+
+<div class="viewcode-block" id="JobTypeTest"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest">[docs]</a><span class="k">class</span> <span class="nc">JobTypeTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">resource_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TEST_RESOURCE_DIR&#39;</span><span class="p">]</span>
+    <span class="n">staging_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;STAGING_DIR&#39;</span><span class="p">]</span>
+    <span class="n">working_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;WORKING_DIR&#39;</span><span class="p">]</span>
+    <span class="n">repository_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;REPOSITORY_DIR&#39;</span><span class="p">]</span>
+    <span class="n">archaeocloud_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;ARCHAEOCLOUD_DIR&#39;</span><span class="p">]</span>
+    <span class="n">bookscan_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;BOOKSCAN_DIR&#39;</span><span class="p">])</span>
+    <span class="n">pdf_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PDF_DIR&#39;</span><span class="p">])</span>
+    <span class="n">mets_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;METS_DIR&#39;</span><span class="p">])</span>
+    <span class="n">tei_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TEI_DIR&#39;</span><span class="p">])</span>
+    <span class="n">archive_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;ARCHIVE_DIR&#39;</span><span class="p">])</span>
+    <span class="n">ptif_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PTIF_DIR&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="JobTypeTest.setUp"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repository_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archaeocloud_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bookscan_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pdf_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mets_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptif_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">app</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.assert_file_in_repository"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.assert_file_in_repository">[docs]</a>    <span class="k">def</span> <span class="nf">assert_file_in_repository</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span>
+                                  <span class="n">timeout</span><span class="o">=</span><span class="s1">&#39;DEFAULT_TEST_TIMEOUT&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that a file is present in the repository.</span>
+
+<span class="sd">        :param str object_id: The id of the cilantro object</span>
+<span class="sd">        :param str file_path: Path of the file to assert</span>
+<span class="sd">        :param str timeout: Name of timeout in ENV file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wait_time</span> <span class="o">=</span> <span class="n">_get_wait_time</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">waited</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repository_dir</span><span class="p">,</span> <span class="n">generate_repository_path</span><span class="p">(</span>
+            <span class="n">object_id</span><span class="p">),</span> <span class="n">file_path</span><span class="p">))</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">waited</span> <span class="o">&gt;</span> <span class="n">wait_time</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;experienced timeout ({wait_time / 1000}s) while waiting &quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;for file &#39;</span><span class="si">{file_path}</span><span class="s2">&#39; to appear in repository&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">waited</span> <span class="o">+=</span> <span class="n">retry_time</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span> <span class="o">*</span> <span class="n">retry_time</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.assert_job_successful"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.assert_job_successful">[docs]</a>    <span class="k">def</span> <span class="nf">assert_job_successful</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_ids</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="s1">&#39;DEFAULT_TEST_TIMEOUT&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that a job completed successfully.</span>
+
+<span class="sd">        Fails if one of the tasks given is in failure state or when wait time</span>
+<span class="sd">        is reached.</span>
+
+<span class="sd">        :param list task_ids: List of ids of tasks</span>
+<span class="sd">        :param str timeout: Name of timeout in ENV file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wait_time</span> <span class="o">=</span> <span class="n">_get_wait_time</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">waited</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">task_id</span> <span class="ow">in</span> <span class="n">task_ids</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">)[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;FAILURE&#39;</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;child task in FAILURE state&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;SUCCESS&#39;</span><span class="p">:</span>
+                    <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">waited</span> <span class="o">=</span> <span class="n">_assert_wait_time</span><span class="p">(</span><span class="n">waited</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;experienced timeout ({wait_time / 1000}s) while waiting &quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;for SUCCESS status&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.assert_status"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.assert_status">[docs]</a>    <span class="k">def</span> <span class="nf">assert_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">expected_status</span><span class="p">,</span>
+                      <span class="n">timeout</span><span class="o">=</span><span class="s1">&#39;DEFAULT_TEST_TIMEOUT&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assert that a job has a certain status.</span>
+
+<span class="sd">        :param str job_id: The id of the job</span>
+<span class="sd">        :param str expected_status: The expected status of the job</span>
+<span class="sd">        :param str timeout: Name of timeout in ENV file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wait_time</span> <span class="o">=</span> <span class="n">_get_wait_time</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">waited</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">expected_status</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">waited</span> <span class="o">=</span> <span class="n">_assert_wait_time</span><span class="p">(</span><span class="n">waited</span><span class="p">,</span> <span class="n">wait_time</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;experienced timeout ({wait_time / 1000}s) while waiting &quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;for status &#39;</span><span class="si">{expected_status}</span><span class="s2">&#39;, last status was &quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{status}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="n">job_id</span><span class="p">)[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.get_status"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the job status.</span>
+
+<span class="sd">        This includes the status string and an optional result object.</span>
+
+<span class="sd">        :param str job_id: The id of the job</span>
+<span class="sd">        :return dict: The response data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;/job/</span><span class="si">{job_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">as_text</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.post_job"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.post_job">[docs]</a>    <span class="k">def</span> <span class="nf">post_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_type</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new job.</span>
+
+<span class="sd">        The result object contains the job_id for the new job that can be used</span>
+<span class="sd">        to query the status and result.</span>
+
+<span class="sd">        :param str job_type: The type of the job</span>
+<span class="sd">        :param data: Parameters passed to the job</span>
+<span class="sd">        :return tuple: The result object and the HTTP status code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">f</span><span class="s1">&#39;/job/</span><span class="si">{job_type}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+            <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">get_auth_header</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">as_text</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.stage_resource"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.stage_resource">[docs]</a>    <span class="k">def</span> <span class="nf">stage_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy a resource (file oder folder) to the staging folder.</span>
+
+<span class="sd">        :param str folder: The source folder</span>
+<span class="sd">        :param str path: The relative path to the resource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_dir</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">test_user</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.unstage_resource"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.unstage_resource">[docs]</a>    <span class="k">def</span> <span class="nf">unstage_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove a resource (file or folder) from the staging folder.</span>
+
+<span class="sd">        :param str path: The relative path to the resource in the staging dir</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">test_user</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.remove_object_from_repository"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.remove_object_from_repository">[docs]</a>    <span class="k">def</span> <span class="nf">remove_object_from_repository</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove an object from the repository.</span>
+
+<span class="sd">        :param str object_id: The id of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repository_dir</span><span class="p">,</span>
+                              <span class="n">generate_repository_path</span><span class="p">(</span><span class="n">object_id</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="JobTypeTest.load_params_from_file"><a class="viewcode-back" href="../../../test.integration.html#test.integration.job_type_test.JobTypeTest.load_params_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">load_params_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load job params from a JSON file.</span>
+
+<span class="sd">        :param str folder: The source folder</span>
+<span class="sd">        :param str path: The relative path to the JSON file</span>
+<span class="sd">        :return: The parsed JSON</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_dir</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_object</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_object</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_get_wait_time</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="s1">&#39;DEFAULT_TEST_TIMEOUT&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine the waittime.</span>
+
+<span class="sd">    Order: specific timeout from env, default timeoutfrom env, 10s.</span>
+
+<span class="sd">    :param str timeout: The name of the timeout variable</span>
+<span class="sd">    :return int: The determined wait time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wait_time</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">wait_time</span> <span class="ow">or</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="s1">&#39;DEFAULT_TEST_TIMEOUT&#39;</span><span class="p">):</span>
+        <span class="n">wait_time</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DEFAULT_TEST_TIMEOUT&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wait_time</span><span class="p">:</span>
+        <span class="n">wait_time</span> <span class="o">=</span> <span class="mi">10000</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

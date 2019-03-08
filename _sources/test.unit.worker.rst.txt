@@ -1,0 +1,20 @@
+test.unit.worker package
+========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    test.unit.worker.convert
+    test.unit.worker.nlp
+    test.unit.worker.ojs
+    test.unit.worker.xml
+
+Module contents
+---------------
+
+.. automodule:: test.unit.worker
+    :members:
+    :undoc-members:
+    :show-inheritance:

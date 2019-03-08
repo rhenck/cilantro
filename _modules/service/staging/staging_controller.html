@@ -1,0 +1,405 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>service.staging.staging_controller &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for service.staging.staging_controller</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">send_file</span>
+<span class="kn">from</span> <span class="nn">werkzeug.utils</span> <span class="k">import</span> <span class="n">secure_filename</span>
+
+<span class="kn">from</span> <span class="nn">service.errors</span> <span class="k">import</span> <span class="n">ApiError</span>
+<span class="kn">from</span> <span class="nn">service.user.user_service</span> <span class="k">import</span> <span class="n">auth</span>
+
+<span class="n">staging_controller</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;staging&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">staging_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;STAGING_DIR&#39;</span><span class="p">]</span>
+
+<span class="n">allowed_extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;tif&#39;</span><span class="p">,</span> <span class="s1">&#39;tiff&#39;</span><span class="p">,</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="s1">&#39;csv&#39;</span><span class="p">]</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_list_dir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="n">tree</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tree</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;directory&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">_list_dir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span><span class="p">))})</span>
+    <span class="k">return</span> <span class="n">tree</span>
+
+
+<div class="viewcode-block" id="delete_from_staging"><a class="viewcode-back" href="../../../service.staging.html#service.staging.staging_controller.delete_from_staging">[docs]</a><span class="nd">@staging_controller</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&lt;path:path&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">],</span>
+                          <span class="n">strict_slashes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@auth</span><span class="o">.</span><span class="n">login_required</span>
+<span class="k">def</span> <span class="nf">delete_from_staging</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete file or directory from the staging area.</span>
+
+<span class="sd">    .. :quickref: Staging Controller; Delete file or dir from the staging area</span>
+
+<span class="sd">    **Example request**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">      DELETE /staging/&lt;path&gt; HTTP/1.1</span>
+
+<span class="sd">    **Example response SUCCESS**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 200 OK</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &quot;success&quot;: true</span>
+<span class="sd">            }</span>
+
+<span class="sd">    **Example response ERROR**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 404 NOT FOUND</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &quot;error&quot;: {</span>
+<span class="sd">                    &quot;code&quot;: &quot;file_not_found&quot;,</span>
+<span class="sd">                    &quot;message&quot;: &quot;No resource was found under the path &lt;path&gt;&quot;</span>
+<span class="sd">                },</span>
+<span class="sd">                &quot;success&quot;: false</span>
+<span class="sd">            }</span>
+
+<span class="sd">    :reqheader Accept: application/json</span>
+<span class="sd">    :resheader Content-Type: application/json</span>
+<span class="sd">    :param str path: path to file or directory to be deleted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">(),</span> <span class="n">path</span><span class="p">))</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">IsADirectoryError</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">(),</span> <span class="n">path</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ApiError</span><span class="p">(</span><span class="s2">&quot;file_not_found&quot;</span><span class="p">,</span>
+                           <span class="n">f</span><span class="s2">&quot;No resource was found under the path </span><span class="si">{path}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}),</span> <span class="mi">200</span></div>
+
+
+<div class="viewcode-block" id="list_staging"><a class="viewcode-back" href="../../../service.staging.html#service.staging.staging_controller.list_staging">[docs]</a><span class="nd">@staging_controller</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">],</span> <span class="n">strict_slashes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@auth</span><span class="o">.</span><span class="n">login_required</span>
+<span class="k">def</span> <span class="nf">list_staging</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    List files and directories in the staging area.</span>
+
+<span class="sd">    Returns a complete recursive folder hierarchy.</span>
+
+<span class="sd">    .. :quickref: Staging Controller; List files/dirs in the staging area</span>
+
+<span class="sd">    **Example request**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">      GET /staging/ HTTP/1.1</span>
+
+<span class="sd">    **Example response**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 200 OK</span>
+
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;name&quot;: &quot;test.pdf&quot;,</span>
+<span class="sd">                &quot;type&quot;: &quot;file&quot;</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+
+<span class="sd">    :reqheader Accept: application/json</span>
+
+<span class="sd">    :resheader Content-Type: application/json</span>
+<span class="sd">    :status 200: OK</span>
+
+<span class="sd">    :return: JSON array containing objects for files and folders</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">_list_dir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">()))</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;List staging called on not-existing folder: &quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;{os.path.join(staging_dir, auth.username())}&quot;</span><span class="p">)</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_path"><a class="viewcode-back" href="../../../service.staging.html#service.staging.staging_controller.get_path">[docs]</a><span class="nd">@staging_controller</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&lt;path:path&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">],</span>
+                          <span class="n">strict_slashes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@auth</span><span class="o">.</span><span class="n">login_required</span>
+<span class="k">def</span> <span class="nf">get_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve a file or folder content from the staging folder.</span>
+
+<span class="sd">    Returns A JSON array containing all file names, if it&#39;s a directory or</span>
+<span class="sd">    the file&#39;s content if it&#39;s a file.</span>
+
+<span class="sd">    .. :quickref: Staging Controller; Retrieve file/folder from staging folder</span>
+
+<span class="sd">    **Example request**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">      GET /staging/&lt;path&gt; HTTP/1.1</span>
+
+<span class="sd">    **Example response ERROR**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 404 NOT FOUND</span>
+
+<span class="sd">        {</span>
+<span class="sd">            &quot;error&quot;: {</span>
+<span class="sd">                &quot;code&quot;: &quot;file_not_found&quot;,</span>
+<span class="sd">                &quot;message&quot;: &quot;No resource was found under the path test&quot;</span>
+<span class="sd">            },</span>
+<span class="sd">            &quot;success&quot;: false</span>
+<span class="sd">        }</span>
+
+<span class="sd">    :reqheader Accept: application/json</span>
+<span class="sd">    :param str path: path to file</span>
+
+<span class="sd">    :resheader Content-Type: application/json</span>
+<span class="sd">    :status 200: array containing all file names, if it&#39;s a directory or the</span>
+<span class="sd">                 file&#39;s content if it&#39;s a file</span>
+<span class="sd">    :status 404: file was not found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">(),</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">abs_path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">abs_path</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">abs_path</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">send_file</span><span class="p">(</span><span class="n">abs_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ApiError</span><span class="p">(</span><span class="s2">&quot;file_not_found&quot;</span><span class="p">,</span>
+                       <span class="n">f</span><span class="s2">&quot;No resource was found under the path </span><span class="si">{path}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="upload_to_staging"><a class="viewcode-back" href="../../../service.staging.html#service.staging.staging_controller.upload_to_staging">[docs]</a><span class="nd">@staging_controller</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">],</span> <span class="n">strict_slashes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@auth</span><span class="o">.</span><span class="n">login_required</span>
+<span class="k">def</span> <span class="nf">upload_to_staging</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Upload files to the staging area.</span>
+
+<span class="sd">    If the names of the given files contain folders, these are created in the</span>
+<span class="sd">    staging area if not already present.</span>
+
+<span class="sd">    The upload endpoint is able to handle single and multiple files provided</span>
+<span class="sd">    under any key.</span>
+
+<span class="sd">    .. :quickref: Staging Controller; Upload files to the staging area</span>
+
+<span class="sd">    **Example request**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">      POST /staging/ HTTP/1.1</span>
+
+<span class="sd">    **Example response SUCCESS**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 200 OK</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;result&quot;: {</span>
+<span class="sd">              &quot;&lt;filename&gt;&quot;: {</span>
+<span class="sd">                  &quot;success&quot;: true</span>
+<span class="sd">              }</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    **Example response ERROR**:</span>
+
+<span class="sd">    .. sourcecode:: http</span>
+
+<span class="sd">        HTTP/1.1 400 BAD REQUEST</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;error&quot;: {</span>
+<span class="sd">              &quot;code&quot;: &quot;no_files_provided&quot;,</span>
+<span class="sd">              &quot;message&quot;: &quot;The request did not contain any files&quot;</span>
+<span class="sd">          },</span>
+<span class="sd">          &quot;success&quot;: false</span>
+<span class="sd">        }</span>
+
+<span class="sd">    :reqheader Accept: multipart/form-data</span>
+<span class="sd">    :formparam file: file to be uploaded</span>
+
+<span class="sd">    :resheader Content-Type: application/json</span>
+<span class="sd">    :&gt;json dict: operation result</span>
+<span class="sd">    :status 200: OK</span>
+<span class="sd">    :status 400: no files were provided</span>
+<span class="sd">    :status 415: one of the files&#39; extension is not allowed</span>
+
+<span class="sd">    :return: a JSON object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Uploading {len(request.files)} files&quot;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">_process_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="n">results</span><span class="p">}),</span> <span class="mi">200</span>
+    <span class="k">raise</span> <span class="n">ApiError</span><span class="p">(</span><span class="s2">&quot;no_files_provided&quot;</span><span class="p">,</span>
+                   <span class="n">f</span><span class="s2">&quot;The request did not contain any files&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_process_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_is_allowed_file</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_upload_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_generate_error_result</span><span class="p">(</span>
+                <span class="n">file</span><span class="p">,</span>
+                <span class="s2">&quot;upload_failed&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;An unknown error occurred.&quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_generate_error_result</span><span class="p">(</span>
+            <span class="n">file</span><span class="p">,</span>
+            <span class="s2">&quot;extension_not_allowed&quot;</span><span class="p">,</span>
+            <span class="n">f</span><span class="s2">&quot;File extension .{_get_file_extension(file.filename)}&quot;</span>
+            <span class="n">f</span><span class="s2">&quot; is not allowed.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_error_result</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Error during upload of </span><span class="si">{file.filename}</span><span class="s2">. </span><span class="si">{message}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot; Cause: {str(e)}&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span>
+            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">}</span>
+        <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_upload_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">secure_filename</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)))</span>
+    <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">staging_dir</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">*</span><span class="n">folders</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">secure_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">_is_allowed_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">filename</span> <span class="ow">and</span> \
+           <span class="n">_get_file_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="ow">in</span> <span class="n">allowed_extensions</span>
+
+
+<span class="k">def</span> <span class="nf">_get_file_extension</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

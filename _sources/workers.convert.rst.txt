@@ -1,0 +1,46 @@
+workers.convert package
+=======================
+
+Submodules
+----------
+
+workers.convert.convert\_image module
+-------------------------------------
+
+.. automodule:: workers.convert.convert_image
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+workers.convert.convert\_pdf module
+-----------------------------------
+
+.. automodule:: workers.convert.convert_pdf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+workers.convert.image\_scaling module
+-------------------------------------
+
+.. automodule:: workers.convert.image_scaling
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+workers.convert.tasks module
+----------------------------
+
+.. automodule:: workers.convert.tasks
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: workers.convert
+    :members:
+    :undoc-members:
+    :show-inheritance:

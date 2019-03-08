@@ -1,0 +1,22 @@
+test.unit.service.repository package
+====================================
+
+Submodules
+----------
+
+test.unit.service.repository.test\_repository\_controller module
+----------------------------------------------------------------
+
+.. automodule:: test.unit.service.repository.test_repository_controller
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.service.repository
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,666 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>utils package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="utils-package">
+<h1>utils package<a class="headerlink" href="#utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-utils.celery_client">
+<span id="utils-celery-client-module"></span><h2>utils.celery_client module<a class="headerlink" href="#module-utils.celery_client" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-utils.job_db">
+<span id="utils-job-db-module"></span><h2>utils.job_db module<a class="headerlink" href="#module-utils.job_db" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.job_db.add_job">
+<code class="descclassname">utils.job_db.</code><code class="descname">add_job</code><span class="sig-paren">(</span><em>job_id</em>, <em>user</em>, <em>job_type</em>, <em>task_ids</em>, <em>job_params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/job_db.html#add_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.job_db.add_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a job to the job database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>job_id</strong> (<em>str</em>) – Cilantro-ID of the job</li>
+<li><strong>user</strong> (<em>str</em>) – username which started the job</li>
+<li><strong>job_type</strong> (<em>str</em>) – type of job, i.e. ‘ingest_journal’</li>
+<li><strong>task_ids</strong> (<em>list</em>) – Cilantro-IDs of all tasks belonging to that job</li>
+<li><strong>job_params</strong> (<em>dict</em>) – Original paramters given when the job was created</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.job_db.create_index">
+<code class="descclassname">utils.job_db.</code><code class="descname">create_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/job_db.html#create_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.job_db.create_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create index for faster lookup in database.</p>
+<p>The 2 fields that are used for lookup/update are indexed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.job_db.get_job_by_id">
+<code class="descclassname">utils.job_db.</code><code class="descname">get_job_by_id</code><span class="sig-paren">(</span><em>job_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/job_db.html#get_job_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.job_db.get_job_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find job with the given job_id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job_id</strong> (<em>str</em>) – job-id to be queried</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">job object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.job_db.get_jobs_for_user">
+<code class="descclassname">utils.job_db.</code><code class="descname">get_jobs_for_user</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/job_db.html#get_jobs_for_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.job_db.get_jobs_for_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all jobs of the passed user in the job database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user</strong> (<em>str</em>) – username to find jobs belonging to</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of job objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.job_db.update_job">
+<code class="descclassname">utils.job_db.</code><code class="descname">update_job</code><span class="sig-paren">(</span><em>job_id</em>, <em>state</em>, <em>error=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/job_db.html#update_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.job_db.update_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a job to the job database with new state and updated timestamp.</p>
+<p>If there is an error object passed then that is added to the list
+of errors of that task. The errors are a list to  make it
+possible to keep executing the task chain even though some tasks
+throw errors. The errors are put into the job entry in the database
+and can be collected later.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>job_id</strong> (<em>str</em>) – Cilantro-ID of the job</li>
+<li><strong>state</strong> (<em>str</em>) – new state of the job</li>
+<li><strong>error</strong> (<em>dict</em>) – (optional) dict containig task name and error message</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.json_validation">
+<span id="utils-json-validation-module"></span><h2>utils.json_validation module<a class="headerlink" href="#module-utils.json_validation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.json_validation.validate_params">
+<code class="descclassname">utils.json_validation.</code><code class="descname">validate_params</code><span class="sig-paren">(</span><em>params</em>, <em>job_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/json_validation.html#validate_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.json_validation.validate_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate JSON string against a schema file.</p>
+<p>The schema file is taken from a subdirectory of the job-type definitions
+with the appendix ‘_schema.json’.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.list_dir">
+<span id="utils-list-dir-module"></span><h2>utils.list_dir module<a class="headerlink" href="#module-utils.list_dir" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.list_dir.list_dir">
+<code class="descclassname">utils.list_dir.</code><code class="descname">list_dir</code><span class="sig-paren">(</span><em>directory</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/list_dir.html#list_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.list_dir.list_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the contents of the directory</p>
+<p>If ignore_not_found kwarg is passed as True an empty list is returned if the
+directory doesn’t exits.
+If sorted kwarfg is passed as True the result is alphanumerical sorted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>directory</strong> (<em>str</em>) – The directory to be listed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return list:</th><td class="field-body">The contents of the directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.mysql">
+<span id="utils-mysql-module"></span><h2>utils.mysql module<a class="headerlink" href="#module-utils.mysql" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.mysql.delete">
+<code class="descclassname">utils.mysql.</code><code class="descname">delete</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mysql.html#delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mysql.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit DELETE query to database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.mysql.insert">
+<code class="descclassname">utils.mysql.</code><code class="descname">insert</code><span class="sig-paren">(</span><em>query</em>, <em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mysql.html#insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mysql.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit INSERT query to database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.mysql.query">
+<code class="descclassname">utils.mysql.</code><code class="descname">query</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mysql.html#query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mysql.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit query to database.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.object">
+<span id="utils-object-module"></span><h2>utils.object module<a class="headerlink" href="#module-utils.object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="utils.object.Actor">
+<em class="property">class </em><code class="descclassname">utils.object.</code><code class="descname">Actor</code><a class="reference internal" href="_modules/utils/object.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Actor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.serialization.SerializableClass" title="utils.serialization.SerializableClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">utils.serialization.SerializableClass</span></code></a></p>
+<p>Personal and legal entities in cilantro metadata.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="utils.object.Object">
+<em class="property">class </em><code class="descclassname">utils.object.</code><code class="descname">Object</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A cilantro object, i.e. a single work unit.</p>
+<p>A cilantro object is a folder that only contains the following files and
+subfolders:
+* a file <cite>meta.json</cite> that contains the metadata for this object
+* additional metadata files that describe the object in different formats      (e.g. mets.xml, tei.xml, marc.xml, …)
+* a folder <cite>data</cite> that contains representations of the complete object      in different binary formats, one representation corresponds to a      subfolder that can hold one or more files in the same format
+* a folder <cite>parts</cite> that contains any number of subfolders that follow the      naming patterns <cite>part_XXXX</cite> which in turn are cilantro objects that      conform to this definition</p>
+<p>This class offers a single interface to the underlying structure and
+simplifies the management of cilantro objects.</p>
+<dl class="attribute">
+<dt id="utils.object.Object.DATA_DIR">
+<code class="descname">DATA_DIR</code><em class="property"> = 'data'</em><a class="headerlink" href="#utils.object.Object.DATA_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="utils.object.Object.INITIAL_REPRESENTATION">
+<code class="descname">INITIAL_REPRESENTATION</code><em class="property"> = 'origin'</em><a class="headerlink" href="#utils.object.Object.INITIAL_REPRESENTATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="utils.object.Object.PARTS_DIR">
+<code class="descname">PARTS_DIR</code><em class="property"> = 'parts'</em><a class="headerlink" href="#utils.object.Object.PARTS_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="utils.object.Object.PART_PREFIX">
+<code class="descname">PART_PREFIX</code><em class="property"> = 'part_'</em><a class="headerlink" href="#utils.object.Object.PART_PREFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.add_file">
+<code class="descname">add_file</code><span class="sig-paren">(</span><em>representation: str</em>, <em>src: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.add_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.add_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a file to a representation of the object.</p>
+<p>This acts as a convenience wrapper around <cite>add_stream()</cite> and handles
+opening and reading the file.</p>
+<p>The generated file has the same name as the source file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>representation</strong> (<em>str</em>) – The file format of the input.</li>
+<li><strong>src</strong> (<em>str</em>) – The path to the source file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.add_part">
+<code class="descname">add_part</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.add_part"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.add_part" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a sub-object to this object.</p>
+<p>Creates a new part_XXXX folder under parts. Also creates the parts
+folder if it does not exist already.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Object:</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.add_stream">
+<code class="descname">add_stream</code><span class="sig-paren">(</span><em>file_name: str</em>, <em>representation: str</em>, <em>file: _io.BytesIO</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.add_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.add_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a stream to a representation of the object.</p>
+<p>A new representation is created if it does not already exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_name</strong> (<em>str</em>) – how the generated file should be named</li>
+<li><strong>representation</strong> (<em>str</em>) – The file format of the input.</li>
+<li><strong>file</strong> (<em>BytesIO</em>) – The input stream</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the whole contents of this object to a new location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The new location on the file system</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return Object:</th><td class="field-body">A new object instance representing the copy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_data_dir">
+<code class="descname">get_data_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.get_data_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_data_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path to the data directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return str:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_parent">
+<code class="descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the parent Object if this is a part.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_part">
+<code class="descname">get_part</code><span class="sig-paren">(</span><em>index: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.get_part"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_part" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a sub-object of this object by index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return Object:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_parts">
+<code class="descname">get_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.get_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all sub-objects of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Return List[Object]:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_parts_dir">
+<code class="descname">get_parts_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.get_parts_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_parts_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path to the parts directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return str:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_representation">
+<code class="descname">get_representation</code><span class="sig-paren">(</span><em>representation: str</em><span class="sig-paren">)</span> &#x2192; Iterator[_io.BytesIO]<a class="reference internal" href="_modules/utils/object.html#Object.get_representation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_representation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all files that correspond to a given representation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>representation</strong> (<em>str</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return Iterator[BytesIO]:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.get_representation_dir">
+<code class="descname">get_representation_dir</code><span class="sig-paren">(</span><em>representation: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.get_representation_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.get_representation_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path to a representation directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>representation</strong> (<em>str</em>) – The name of the representation</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return str:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.list_representations">
+<code class="descname">list_representations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="_modules/utils/object.html#Object.list_representations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.list_representations" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the representations that the object offers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Return List[str]:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.set_metadata_from_dict">
+<code class="descname">set_metadata_from_dict</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.set_metadata_from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.set_metadata_from_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="utils.object.Object.write">
+<code class="descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/object.html#Object.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.Object.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the current object metadata state to the file system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="utils.object.ObjectMetadata">
+<em class="property">class </em><code class="descclassname">utils.object.</code><code class="descname">ObjectMetadata</code><a class="reference internal" href="_modules/utils/object.html#ObjectMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.ObjectMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.serialization.SerializableClass" title="utils.serialization.SerializableClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">utils.serialization.SerializableClass</span></code></a></p>
+<p>Basic metadata that can be recorded for every cilantro object.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="utils.object.PagesInfo">
+<em class="property">class </em><code class="descclassname">utils.object.</code><code class="descname">PagesInfo</code><a class="reference internal" href="_modules/utils/object.html#PagesInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.PagesInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#utils.serialization.SerializableClass" title="utils.serialization.SerializableClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">utils.serialization.SerializableClass</span></code></a></p>
+<p>Printing and visualisation information for the document.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="utils.object.PathDoesNotExist">
+<em class="property">exception </em><code class="descclassname">utils.object.</code><code class="descname">PathDoesNotExist</code><a class="reference internal" href="_modules/utils/object.html#PathDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.object.PathDoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.repository">
+<span id="utils-repository-module"></span><h2>utils.repository module<a class="headerlink" href="#module-utils.repository" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.repository.generate_repository_path">
+<code class="descclassname">utils.repository.</code><code class="descname">generate_repository_path</code><span class="sig-paren">(</span><em>object_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/repository.html#generate_repository_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.repository.generate_repository_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the path of a cilantro (sub)object in the repository.</p>
+<p>This is based on the md5 checksum of the object_id.</p>
+<p>E.g. object_id “foo” is stored under “ac/bd/foo” and the object_id
+“foo/part_0001” (subobject of “foo”) is stored under
+“ac/bd/foo/parts/part_0001”.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object_id</strong> (<em>str</em>) – The bject_id of the cilantro object, may contain
+slashes if it is a subobject. Works with any depth.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return str:</th><td class="field-body">The path where the object is stored in the repository</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.repository.list_objects_in_repository">
+<code class="descclassname">utils.repository.</code><code class="descname">list_objects_in_repository</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/repository.html#list_objects_in_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.repository.list_objects_in_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all object_ids in the repository</p>
+<p>This method assumes the objects to be stored in checksum-based folders.
+E.g. the object with the id “foo” is stored under “ac/bd/foo”.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return list:</th><td class="field-body">List of all object_ids in the repository</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.serialization">
+<span id="utils-serialization-module"></span><h2>utils.serialization module<a class="headerlink" href="#module-utils.serialization" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="utils.serialization.PathDoesNotExist">
+<em class="property">exception </em><code class="descclassname">utils.serialization.</code><code class="descname">PathDoesNotExist</code><a class="reference internal" href="_modules/utils/serialization.html#PathDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.serialization.PathDoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="utils.serialization.SerializableClass">
+<em class="property">class </em><code class="descclassname">utils.serialization.</code><code class="descname">SerializableClass</code><a class="reference internal" href="_modules/utils/serialization.html#SerializableClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.serialization.SerializableClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="classmethod">
+<dt id="utils.serialization.SerializableClass.from_dict">
+<em class="property">classmethod </em><code class="descname">from_dict</code><span class="sig-paren">(</span><em>dic: dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/serialization.html#SerializableClass.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.serialization.SerializableClass.from_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an object of the given Class from a dictionary.</p>
+<p>Fills the attributes accordingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dic</strong> (<em>dict</em>) – The dictionary that represents the object of the class</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">cls: The generated object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.serialization.SerializableClass.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/serialization.html#SerializableClass.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.serialization.SerializableClass.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="utils.serialization.SerializableClass.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/serialization.html#SerializableClass.to_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.serialization.SerializableClass.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="utils.serialization.SerializableClass.to_named_tuple">
+<code class="descname">to_named_tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/serialization.html#SerializableClass.to_named_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.serialization.SerializableClass.to_named_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a tuple&lt;cls&gt; object.</p>
+<p>Works exactly as an object from the Class cls, but is NOT an instance
+of it and has less incompatibility issues than a simple dict.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple&lt;cls&gt;: The generated named tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.setup_logging">
+<span id="utils-setup-logging-module"></span><h2>utils.setup_logging module<a class="headerlink" href="#module-utils.setup_logging" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.setup_logging.setup_logging">
+<code class="descclassname">utils.setup_logging.</code><code class="descname">setup_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/setup_logging.html#setup_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.setup_logging.setup_logging" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-utils.sorting_algorithms">
+<span id="utils-sorting-algorithms-module"></span><h2>utils.sorting_algorithms module<a class="headerlink" href="#module-utils.sorting_algorithms" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="utils.sorting_algorithms.sort_alphanumeric">
+<code class="descclassname">utils.sorting_algorithms.</code><code class="descname">sort_alphanumeric</code><span class="sig-paren">(</span><em>it</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/sorting_algorithms.html#sort_alphanumeric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.sorting_algorithms.sort_alphanumeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts the given iterable in the way that is expected.</p>
+<p>E.g. test.txt, test_1.txt, test_2.txt, test_11.txt</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>it</strong> (<em>iterable</em>) – Iterable to be sorted</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return iterable:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Sorted iterable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,56 @@
+service package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+
+    service.job
+    service.repository
+    service.staging
+    service.user
+
+Submodules
+----------
+
+service.errors module
+---------------------
+
+.. automodule:: service.errors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+service.front\_controller module
+--------------------------------
+
+.. automodule:: service.front_controller
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+service.run\_service module
+---------------------------
+
+.. automodule:: service.run_service
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+service.utils module
+--------------------
+
+.. automodule:: service.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: service
+    :members:
+    :undoc-members:
+    :show-inheritance:

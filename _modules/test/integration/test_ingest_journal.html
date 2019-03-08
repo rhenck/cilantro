@@ -1,0 +1,202 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.integration.test_ingest_journal &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for test.integration.test_ingest_journal</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">utils.repository</span> <span class="k">import</span> <span class="n">generate_repository_path</span>
+<span class="kn">from</span> <span class="nn">test.integration.job_type_test</span> <span class="k">import</span> <span class="n">JobTypeTest</span>
+
+
+<div class="viewcode-block" id="IngestJournalTest"><a class="viewcode-back" href="../../../test.integration.html#test.integration.test_ingest_journal.IngestJournalTest">[docs]</a><span class="k">class</span> <span class="nc">IngestJournalTest</span><span class="p">(</span><span class="n">JobTypeTest</span><span class="p">):</span>
+
+<div class="viewcode-block" id="IngestJournalTest.test_no_ocr"><a class="viewcode-back" href="../../../test.integration.html#test.integration.test_ingest_journal.IngestJournalTest.test_no_ocr">[docs]</a>    <span class="k">def</span> <span class="nf">test_no_ocr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test ingest journal functionality without OCR tasks.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage_resource</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="s1">&#39;test.pdf&#39;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_params_from_file</span><span class="p">(</span><span class="s1">&#39;params&#39;</span><span class="p">,</span> <span class="s1">&#39;a_journal.json&#39;</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="p">,</span> <span class="n">status_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_job</span><span class="p">(</span><span class="s1">&#39;ingest_journal&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">202</span><span class="p">)</span>
+        <span class="n">job_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;Accepted&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assert_status</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="s1">&#39;SUCCESS&#39;</span><span class="p">,</span> <span class="s2">&quot;JOURNAL_TEST_TIMEOUT&quot;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;object_id&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">])</span>
+        <span class="n">object_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;object_id&#39;</span><span class="p">]</span>
+        <span class="n">journal_code</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;ojs_metadata&#39;</span><span class="p">][</span><span class="s1">&#39;ojs_journal_code&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">object_id</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;issue-</span><span class="si">{journal_code}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">files_generated</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;data/origin/merged.pdf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/data/origin/merged.pdf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/meta.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/marc.xml&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/data/txt/merged_0000.txt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/data/txt/annotations.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/origin/merged.pdf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/meta.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/marc.xml&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/txt/merged_0000.txt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/txt/annotations.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;meta.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ojs_import.xml&#39;</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_generated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assert_file_in_repository</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+        <span class="c1"># Check if the generated XML contains galley, which is required</span>
+        <span class="c1"># for the ojs import and frontmatter generation</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;REPOSITORY_DIR&#39;</span><span class="p">],</span>
+                                 <span class="n">generate_repository_path</span><span class="p">(</span><span class="n">object_id</span><span class="p">),</span>
+                                 <span class="s1">&#39;ojs_import.xml&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">xml_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;galley&quot;</span><span class="p">,</span> <span class="n">xml_content</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">unstage_resource</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IngestJournalTest.test_do_ocr"><a class="viewcode-back" href="../../../test.integration.html#test.integration.test_ingest_journal.IngestJournalTest.test_do_ocr">[docs]</a>    <span class="k">def</span> <span class="nf">test_do_ocr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test ingest journal functionality with OCR tasks enabled.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage_resource</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="s1">&#39;test.pdf&#39;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_params_from_file</span><span class="p">(</span><span class="s1">&#39;params&#39;</span><span class="p">,</span> <span class="s1">&#39;a_journal_do_ocr.json&#39;</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="p">,</span> <span class="n">status_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_job</span><span class="p">(</span><span class="s1">&#39;ingest_journal&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">202</span><span class="p">)</span>
+        <span class="n">job_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;Accepted&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assert_status</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="s1">&#39;SUCCESS&#39;</span><span class="p">,</span> <span class="s2">&quot;JOURNAL_TEST_TIMEOUT&quot;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;object_id&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">])</span>
+        <span class="n">object_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;object_id&#39;</span><span class="p">]</span>
+        <span class="n">journal_code</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;ojs_metadata&#39;</span><span class="p">][</span><span class="s1">&#39;ojs_journal_code&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">object_id</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;issue-</span><span class="si">{journal_code}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">files_generated</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;parts/part_0001/data/origin/merged.pdf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/meta.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/marc.xml&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/data/tif/merged_0000.tif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/data/txt/merged_0000.txt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0001/data/txt/annotations.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/origin/merged.pdf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/meta.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/marc.xml&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/tif/merged_0000.tif&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/txt/merged_0000.txt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parts/part_0002/data/txt/annotations.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;meta.json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ojs_import.xml&#39;</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_generated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assert_file_in_repository</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unstage_resource</span><span class="p">(</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_test_mets_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">f</span><span class="s1">&#39;/repository/file/</span><span class="si">{object_id}</span><span class="s1">/part_0001/mets.xml&#39;</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&lt;mets:FLocat LOCTYPE=&quot;URL&quot; xlink:href=&quot;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">link</span><span class="p">)</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

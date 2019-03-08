@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>workers.default.arachne package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="workers-default-arachne-package">
+<h1>workers.default.arachne package<a class="headerlink" href="#workers-default-arachne-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-workers.default.arachne.cloud_publish">
+<span id="workers-default-arachne-cloud-publish-module"></span><h2>workers.default.arachne.cloud_publish module<a class="headerlink" href="#module-workers.default.arachne.cloud_publish" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="workers.default.arachne.cloud_publish.move_jpeg_to_cloud">
+<code class="descclassname">workers.default.arachne.cloud_publish.</code><code class="descname">move_jpeg_to_cloud</code><span class="sig-paren">(</span><em>object_id</em>, <em>book_id</em>, <em>book_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/cloud_publish.html#move_jpeg_to_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.cloud_publish.move_jpeg_to_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move JPEG images to cloud.</p>
+<p>Move jpeg-images of pages to bookscan folder and to archive folder.
+Create the target folders if not existing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.default.arachne.cloud_publish.move_pdf_to_cloud">
+<code class="descclassname">workers.default.arachne.cloud_publish.</code><code class="descname">move_pdf_to_cloud</code><span class="sig-paren">(</span><em>object_id</em>, <em>book_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/cloud_publish.html#move_pdf_to_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.cloud_publish.move_pdf_to_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move book’s PDF to cloud folder.</p>
+<p>Also create the target directory if not existing.</p>
+<p>The PDF is zipped before being copied over and renamed with the object_id.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.default.arachne.cloud_publish.move_ptif_to_cloud">
+<code class="descclassname">workers.default.arachne.cloud_publish.</code><code class="descname">move_ptif_to_cloud</code><span class="sig-paren">(</span><em>object_id</em>, <em>book_id</em>, <em>book_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/cloud_publish.html#move_ptif_to_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.cloud_publish.move_ptif_to_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move PTIF-images of pages to archive folder.</p>
+<p>Also create the target folder if not existing.</p>
+<p>The files are renamed with the object_id and a continuous index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.default.arachne.cloud_publish.move_tei_to_cloud">
+<code class="descclassname">workers.default.arachne.cloud_publish.</code><code class="descname">move_tei_to_cloud</code><span class="sig-paren">(</span><em>object_id</em>, <em>book_id</em>, <em>book_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/cloud_publish.html#move_tei_to_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.cloud_publish.move_tei_to_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move book’s TEI-XML to cloud folder.</p>
+<p>Also create the target directory if not existing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.default.arachne.cloud_publish.move_tiff_to_cloud">
+<code class="descclassname">workers.default.arachne.cloud_publish.</code><code class="descname">move_tiff_to_cloud</code><span class="sig-paren">(</span><em>object_id</em>, <em>book_id</em>, <em>book_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/cloud_publish.html#move_tiff_to_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.cloud_publish.move_tiff_to_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move TIFF-images of pages to archive folder.</p>
+<p>Also create the target folder if not existing.</p>
+<p>The files are renamed with the object_id and a continuous index.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers.default.arachne.db_publish">
+<span id="workers-default-arachne-db-publish-module"></span><h2>workers.default.arachne.db_publish module<a class="headerlink" href="#module-workers.default.arachne.db_publish" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="workers.default.arachne.db_publish.add_book">
+<code class="descclassname">workers.default.arachne.db_publish.</code><code class="descname">add_book</code><span class="sig-paren">(</span><em>book</em>, <em>object_id</em>, <em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/db_publish.html#add_book"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.db_publish.add_book" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write book data to Arachne-Database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.default.arachne.db_publish.add_pages">
+<code class="descclassname">workers.default.arachne.db_publish.</code><code class="descname">add_pages</code><span class="sig-paren">(</span><em>book_id</em>, <em>book_object</em>, <em>object_id</em>, <em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/default/arachne/db_publish.html#add_pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.default.arachne.db_publish.add_pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create database entries for pages and their images.</p>
+<p>Entries in ‘buchseite’ and ‘marbilder’ for every page, by calling internal
+methods ‘_add_page_to_db’ and ‘_add_image_to_db’.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers.default.arachne.tasks">
+<span id="workers-default-arachne-tasks-module"></span><h2>workers.default.arachne.tasks module<a class="headerlink" href="#module-workers.default.arachne.tasks" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-workers.default.arachne">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-workers.default.arachne" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/workers.default.arachne.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

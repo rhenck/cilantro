@@ -1,0 +1,30 @@
+service.user package
+====================
+
+Submodules
+----------
+
+service.user.user\_controller module
+------------------------------------
+
+.. automodule:: service.user.user_controller
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+service.user.user\_service module
+---------------------------------
+
+.. automodule:: service.user.user_service
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: service.user
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,531 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>workers package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="workers-package">
+<h1>workers package<a class="headerlink" href="#workers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="workers.convert.html">workers.convert package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workers.convert.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.convert.html#module-workers.convert.convert_image">workers.convert.convert_image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.convert.html#module-workers.convert.convert_pdf">workers.convert.convert_pdf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.convert.html#module-workers.convert.image_scaling">workers.convert.image_scaling module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.convert.html#module-workers.convert.tasks">workers.convert.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.convert.html#module-workers.convert">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workers.default.html">workers.default package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workers.default.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="workers.default.arachne.html">workers.default.arachne package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.arachne.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.arachne.html#module-workers.default.arachne.cloud_publish">workers.default.arachne.cloud_publish module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.arachne.html#module-workers.default.arachne.db_publish">workers.default.arachne.db_publish module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.arachne.html#module-workers.default.arachne.tasks">workers.default.arachne.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.arachne.html#module-workers.default.arachne">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="workers.default.ojs.html">workers.default.ojs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.ojs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.ojs.html#module-workers.default.ojs.ojs_api">workers.default.ojs.ojs_api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.ojs.html#module-workers.default.ojs.tasks">workers.default.ojs.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.ojs.html#module-workers.default.ojs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="workers.default.repository.html">workers.default.repository package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.repository.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.repository.html#module-workers.default.repository.tasks">workers.default.repository.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.repository.html#module-workers.default.repository">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="workers.default.utils.html">workers.default.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.utils.html#module-workers.default.utils.tasks">workers.default.utils.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.utils.html#module-workers.default.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="workers.default.xml.html">workers.default.xml package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.xml.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.xml.html#module-workers.default.xml.tasks">workers.default.xml.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.xml.html#module-workers.default.xml.xml_generator">workers.default.xml.xml_generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.xml.html#module-workers.default.xml.xml_validator">workers.default.xml.xml_validator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.default.xml.html#module-workers.default.xml">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="workers.default.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.default.html#module-workers.default.tasks">workers.default.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.default.html#module-workers.default">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workers.nlp.html">workers.nlp package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workers.nlp.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="workers.nlp.annotate.html">workers.nlp.annotate package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="workers.nlp.annotate.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.nlp.annotate.html#module-workers.nlp.annotate.annotate">workers.nlp.annotate.annotate module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.nlp.annotate.html#module-workers.nlp.annotate.tasks">workers.nlp.annotate.tasks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="workers.nlp.annotate.html#module-workers.nlp.annotate">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="workers.nlp.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.nlp.html#module-workers.nlp.tasks">workers.nlp.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workers.nlp.html#module-workers.nlp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-workers.base_task">
+<span id="workers-base-task-module"></span><h2>workers.base_task module<a class="headerlink" href="#module-workers.base_task" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="workers.base_task.BaseTask">
+<em class="property">class </em><code class="descclassname">workers.base_task.</code><code class="descname">BaseTask</code><a class="reference internal" href="_modules/workers/base_task.html#BaseTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">celery.task.base.Task</span></code></p>
+<p>Abstract base class for all tasks in cilantro.</p>
+<p>It provides parameter handling and utility methods for accessing
+the file system.</p>
+<p>Implementations should override the execute_task() method.</p>
+<p>Return values of execute_task() are saved under the ‘result’ key in the
+params dictionary. This allows reading task results at a later stage,
+i.e. in a following task or when querying the job status.</p>
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.acks_late">
+<code class="descname">acks_late</code><em class="property"> = False</em><a class="headerlink" href="#workers.base_task.BaseTask.acks_late" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.delivery_mode">
+<code class="descname">delivery_mode</code><em class="property"> = 2</em><a class="headerlink" href="#workers.base_task.BaseTask.delivery_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.exchange_type">
+<code class="descname">exchange_type</code><em class="property"> = 'direct'</em><a class="headerlink" href="#workers.base_task.BaseTask.exchange_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.BaseTask.execute_task">
+<code class="descname">execute_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#BaseTask.execute_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask.execute_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the task.</p>
+<p>This method has to be implemented by all subclassed tasks and includes
+the actual implementation logic of the specific task.</p>
+<p>Results have to be dicts or lists of results and are merged recursively
+so that partial results in task chains accumulate and may be extended
+or modified by following tasks.</p>
+<p>Tasks do not have to return results, i.e. the result may be None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return dict:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.BaseTask.get_param">
+<code class="descname">get_param</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#BaseTask.get_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask.get_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.BaseTask.get_result">
+<code class="descname">get_result</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#BaseTask.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.BaseTask.get_work_path">
+<code class="descname">get_work_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#BaseTask.get_work_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask.get_work_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.ignore_result">
+<code class="descname">ignore_result</code><em class="property"> = False</em><a class="headerlink" href="#workers.base_task.BaseTask.ignore_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.log">
+<code class="descname">log</code><em class="property"> = &lt;Logger workers.base_task (INFO)&gt;</em><a class="headerlink" href="#workers.base_task.BaseTask.log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.name">
+<code class="descname">name</code><em class="property"> = 'workers.base_task.BaseTask'</em><a class="headerlink" href="#workers.base_task.BaseTask.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.params">
+<code class="descname">params</code><em class="property"> = {}</em><a class="headerlink" href="#workers.base_task.BaseTask.params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.rate_limit">
+<code class="descname">rate_limit</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.BaseTask.rate_limit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.reject_on_worker_lost">
+<code class="descname">reject_on_worker_lost</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.BaseTask.reject_on_worker_lost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.request_stack">
+<code class="descname">request_stack</code><em class="property"> = &lt;celery.utils.threads._LocalStack object&gt;</em><a class="headerlink" href="#workers.base_task.BaseTask.request_stack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.results">
+<code class="descname">results</code><em class="property"> = {}</em><a class="headerlink" href="#workers.base_task.BaseTask.results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.BaseTask.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>prev_result=None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#BaseTask.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the task logic and handle possible errors.</p>
+<p>In case the task throws an exception, it is caught and the task
+is replaced by a special task for handling exceptions.
+This task writes the error to the job database and sets the job status
+to ‘failed’.</p>
+<p>Exceptions coming from the exception handler are just reraised
+and not handled further.</p>
+<p>Exceptions coming from celery because of ignored tasks are reraised
+and not handled further.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prev_result</strong> (<em>dict/list</em>) – (optional) result of the previous task</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return dict:</th><td class="field-body">merged result of the task and previous tasks</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.serializer">
+<code class="descname">serializer</code><em class="property"> = 'json'</em><a class="headerlink" href="#workers.base_task.BaseTask.serializer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.BaseTask.stop_chain_execution">
+<code class="descname">stop_chain_execution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#BaseTask.stop_chain_execution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.BaseTask.stop_chain_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop execution of all tasks in the chain.</p>
+<p>This is obviously for error cases. When an error is thrown and
+handled, the execution would continue in it erroneous state and
+throw even more errors.
+With this the task chain is emptied and execution stops.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.store_errors_even_if_ignored">
+<code class="descname">store_errors_even_if_ignored</code><em class="property"> = False</em><a class="headerlink" href="#workers.base_task.BaseTask.store_errors_even_if_ignored" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.track_started">
+<code class="descname">track_started</code><em class="property"> = False</em><a class="headerlink" href="#workers.base_task.BaseTask.track_started" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.typing">
+<code class="descname">typing</code><em class="property"> = True</em><a class="headerlink" href="#workers.base_task.BaseTask.typing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.work_path">
+<code class="descname">work_path</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.BaseTask.work_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.BaseTask.working_dir">
+<code class="descname">working_dir</code><em class="property"> = '/data/workspace'</em><a class="headerlink" href="#workers.base_task.BaseTask.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="workers.base_task.ExceptionHandlingException">
+<em class="property">exception </em><code class="descclassname">workers.base_task.</code><code class="descname">ExceptionHandlingException</code><a class="reference internal" href="_modules/workers/base_task.html#ExceptionHandlingException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.ExceptionHandlingException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception to handle errors when handling Exceptions.</p>
+<p>This is to be thrown when an error occurs while handling another exception.
+This way a loop is avoided.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="workers.base_task.FileTask">
+<em class="property">class </em><code class="descclassname">workers.base_task.</code><code class="descname">FileTask</code><a class="reference internal" href="_modules/workers/base_task.html#FileTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.FileTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#workers.base_task.BaseTask" title="workers.base_task.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">workers.base_task.BaseTask</span></code></a></p>
+<p>Abstract base class for file based tasks.</p>
+<p>Subclasses have to override the process_file method that holds the
+actual conversion logic.</p>
+<dl class="method">
+<dt id="workers.base_task.FileTask.execute_task">
+<code class="descname">execute_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#FileTask.execute_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.FileTask.execute_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the task.</p>
+<p>This method has to be implemented by all subclassed tasks and includes
+the actual implementation logic of the specific task.</p>
+<p>Results have to be dicts or lists of results and are merged recursively
+so that partial results in task chains accumulate and may be extended
+or modified by following tasks.</p>
+<p>Tasks do not have to return results, i.e. the result may be None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return dict:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.FileTask.name">
+<code class="descname">name</code><em class="property"> = 'workers.base_task.FileTask'</em><a class="headerlink" href="#workers.base_task.FileTask.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.FileTask.process_file">
+<code class="descname">process_file</code><span class="sig-paren">(</span><em>file</em>, <em>target_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#FileTask.process_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.FileTask.process_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a single file.</p>
+<p>This method has to be implemented by all subclassed tasks and includes
+the actual implementation logic of the specific task.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file</strong> (<em>str</em>) – The path to the file that should be processed</li>
+<li><strong>target_dir</strong> (<em>str</em>) – The path of the target directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return None:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.FileTask.rate_limit">
+<code class="descname">rate_limit</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.FileTask.rate_limit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.FileTask.reject_on_worker_lost">
+<code class="descname">reject_on_worker_lost</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.FileTask.reject_on_worker_lost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="workers.base_task.ObjectTask">
+<em class="property">class </em><code class="descclassname">workers.base_task.</code><code class="descname">ObjectTask</code><a class="reference internal" href="_modules/workers/base_task.html#ObjectTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.ObjectTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#workers.base_task.BaseTask" title="workers.base_task.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">workers.base_task.BaseTask</span></code></a></p>
+<p>Abstract base class for object based tasks.</p>
+<p>Subclasses have to override the process_object method that holds the
+actual transformation logic.</p>
+<dl class="method">
+<dt id="workers.base_task.ObjectTask.execute_task">
+<code class="descname">execute_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#ObjectTask.execute_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.ObjectTask.execute_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the task.</p>
+<p>This method has to be implemented by all subclassed tasks and includes
+the actual implementation logic of the specific task.</p>
+<p>Results have to be dicts or lists of results and are merged recursively
+so that partial results in task chains accumulate and may be extended
+or modified by following tasks.</p>
+<p>Tasks do not have to return results, i.e. the result may be None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return dict:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.ObjectTask.get_object">
+<code class="descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#ObjectTask.get_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.ObjectTask.get_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.ObjectTask.name">
+<code class="descname">name</code><em class="property"> = 'workers.base_task.ObjectTask'</em><a class="headerlink" href="#workers.base_task.ObjectTask.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="workers.base_task.ObjectTask.process_object">
+<code class="descname">process_object</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#ObjectTask.process_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.ObjectTask.process_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a single object.</p>
+<p>This method has to be implemented by all subclassed tasks and includes
+the actual implementation logic of the specific task.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<a class="reference internal" href="utils.html#utils.object.Object" title="utils.object.Object"><em>Object</em></a>) – The cilantro object that should be processed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return dict:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.ObjectTask.rate_limit">
+<code class="descname">rate_limit</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.ObjectTask.rate_limit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="workers.base_task.ObjectTask.reject_on_worker_lost">
+<code class="descname">reject_on_worker_lost</code><em class="property"> = None</em><a class="headerlink" href="#workers.base_task.ObjectTask.reject_on_worker_lost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.base_task.merge_dicts">
+<code class="descclassname">workers.base_task.</code><code class="descname">merge_dicts</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#merge_dicts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.merge_dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deep merge two dictionaries.</p>
+<p>The two dictionaries are merged recursively so that values
+that are themselves dictionaries are merged as well.</p>
+<p>Entries in dict b override values in dict a.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a</strong> (<em>dict</em>) – </li>
+<li><strong>b</strong> (<em>dict</em>) – </li>
+<li><strong>path</strong> (<em>str</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return dict:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="workers.base_task.on_celery_setup_logging">
+<code class="descclassname">workers.base_task.</code><code class="descname">on_celery_setup_logging</code><span class="sig-paren">(</span><em>**_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/workers/base_task.html#on_celery_setup_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#workers.base_task.on_celery_setup_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable manual logging configuration, independent of celery.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-workers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-workers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/workers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,369 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>utils.object &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for utils.object</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">BytesIO</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">distutils.dir_util</span> <span class="k">import</span> <span class="n">copy_tree</span>
+
+<span class="kn">from</span> <span class="nn">utils.serialization</span> <span class="k">import</span> <span class="n">SerializableClass</span>
+<span class="kn">from</span> <span class="nn">utils.list_dir</span> <span class="k">import</span> <span class="n">list_dir</span>
+
+
+<div class="viewcode-block" id="PathDoesNotExist"><a class="viewcode-back" href="../../utils.html#utils.object.PathDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">PathDoesNotExist</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="PagesInfo"><a class="viewcode-back" href="../../utils.html#utils.object.PagesInfo">[docs]</a><span class="k">class</span> <span class="nc">PagesInfo</span><span class="p">(</span><span class="n">SerializableClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Printing and visualisation information for the document.&quot;&quot;&quot;</span>
+
+    <span class="n">showndesc</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">startPrint</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">endPrint</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="Actor"><a class="viewcode-back" href="../../utils.html#utils.object.Actor">[docs]</a><span class="k">class</span> <span class="nc">Actor</span><span class="p">(</span><span class="n">SerializableClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Personal and legal entities in cilantro metadata.&quot;&quot;&quot;</span>
+
+    <span class="n">firstname</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="ObjectMetadata"><a class="viewcode-back" href="../../utils.html#utils.object.ObjectMetadata">[docs]</a><span class="k">class</span> <span class="nc">ObjectMetadata</span><span class="p">(</span><span class="n">SerializableClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Basic metadata that can be recorded for every cilantro object.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">abstract</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">creator</span><span class="p">:</span> <span class="n">Actor</span>
+    <span class="n">created</span><span class="p">:</span> <span class="n">datetime</span>
+
+    <span class="n">pages</span><span class="p">:</span> <span class="n">PagesInfo</span>
+
+    <span class="n">year</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">number</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">identification</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="Object"><a class="viewcode-back" href="../../utils.html#utils.object.Object">[docs]</a><span class="k">class</span> <span class="nc">Object</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A cilantro object, i.e. a single work unit.</span>
+
+<span class="sd">    A cilantro object is a folder that only contains the following files and</span>
+<span class="sd">    subfolders:</span>
+<span class="sd">    * a file `meta.json` that contains the metadata for this object</span>
+<span class="sd">    * additional metadata files that describe the object in different formats\</span>
+<span class="sd">      (e.g. mets.xml, tei.xml, marc.xml, ...)</span>
+<span class="sd">    * a folder `data` that contains representations of the complete object\</span>
+<span class="sd">      in different binary formats, one representation corresponds to a\</span>
+<span class="sd">      subfolder that can hold one or more files in the same format</span>
+<span class="sd">    * a folder `parts` that contains any number of subfolders that follow the\</span>
+<span class="sd">      naming patterns `part_XXXX` which in turn are cilantro objects that\</span>
+<span class="sd">      conform to this definition</span>
+
+<span class="sd">    This class offers a single interface to the underlying structure and</span>
+<span class="sd">    simplifies the management of cilantro objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INITIAL_REPRESENTATION</span> <span class="o">=</span> <span class="s2">&quot;origin&quot;</span>
+    <span class="n">PART_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;part_&quot;</span>
+    <span class="n">PARTS_DIR</span> <span class="o">=</span> <span class="s2">&quot;parts&quot;</span>
+    <span class="n">DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span>
+
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="n">ObjectMetadata</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an empty cilantro object that lives in path or finds one.</span>
+
+<span class="sd">        :param str path: the Path where the object lives.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;meta.json&#39;</span><span class="p">)):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;meta.json&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                      <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ObjectMetadata</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ObjectMetadata</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;meta.json&#39;</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> \
+                <span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ObjectMetadata</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Object.write"><a class="viewcode-back" href="../../utils.html#utils.object.Object.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the current object metadata state to the file system.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;meta.json&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                  <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Object.add_stream"><a class="viewcode-back" href="../../utils.html#utils.object.Object.add_stream">[docs]</a>    <span class="k">def</span> <span class="nf">add_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">representation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="n">BytesIO</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a stream to a representation of the object.</span>
+
+<span class="sd">        A new representation is created if it does not already exist.</span>
+
+<span class="sd">        :param str file_name: how the generated file should be named</span>
+<span class="sd">        :param str representation: The file format of the input.</span>
+<span class="sd">        :param BytesIO file: The input stream</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_representation_dir</span><span class="p">(</span><span class="n">representation</span><span class="p">)):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_representation_dir</span><span class="p">(</span><span class="n">representation</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_representation_dir</span><span class="p">(</span><span class="n">representation</span><span class="p">),</span>
+                               <span class="n">file_name</span><span class="p">),</span> <span class="s1">&#39;wb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Object.add_file"><a class="viewcode-back" href="../../utils.html#utils.object.Object.add_file">[docs]</a>    <span class="k">def</span> <span class="nf">add_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">representation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a file to a representation of the object.</span>
+
+<span class="sd">        This acts as a convenience wrapper around `add_stream()` and handles</span>
+<span class="sd">        opening and reading the file.</span>
+
+<span class="sd">        The generated file has the same name as the source file.</span>
+
+<span class="sd">        :param str representation: The file format of the input.</span>
+<span class="sd">        :param str src: The path to the source file</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">),</span> <span class="n">representation</span><span class="p">,</span>
+                            <span class="n">BytesIO</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span></div>
+
+<div class="viewcode-block" id="Object.list_representations"><a class="viewcode-back" href="../../utils.html#utils.object.Object.list_representations">[docs]</a>    <span class="k">def</span> <span class="nf">list_representations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List the representations that the object offers.</span>
+
+<span class="sd">        :return List[str]:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">representations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data_dir</span><span class="p">()):</span>
+            <span class="n">representations</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data_dir</span><span class="p">())</span>
+            <span class="n">representations</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">representations</span></div>
+
+<div class="viewcode-block" id="Object.get_representation"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_representation">[docs]</a>    <span class="k">def</span> <span class="nf">get_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">representation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">BytesIO</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all files that correspond to a given representation.</span>
+
+<span class="sd">        :param str representation:</span>
+<span class="sd">        :return Iterator[BytesIO]:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">representations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_representation_dir</span><span class="p">(</span><span class="n">representation</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">list_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                    <span class="n">representations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">representations</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Object.set_metadata_from_dict"><a class="viewcode-back" href="../../utils.html#utils.object.Object.set_metadata_from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">set_metadata_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ObjectMetadata</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Object.add_part"><a class="viewcode-back" href="../../utils.html#utils.object.Object.add_part">[docs]</a>    <span class="k">def</span> <span class="nf">add_part</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a sub-object to this object.</span>
+
+<span class="sd">        Creates a new part_XXXX folder under parts. Also creates the parts</span>
+<span class="sd">        folder if it does not exist already.</span>
+
+<span class="sd">        :return: Object:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">()):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">())</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">(),</span>
+                                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.PART_PREFIX}</span><span class="s2">0001&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Object</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">part_no</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">()))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_part</span><span class="p">(</span><span class="n">part_no</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Object.get_part"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_part">[docs]</a>    <span class="k">def</span> <span class="nf">get_part</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a sub-object of this object by index.</span>
+
+<span class="sd">        :param index:</span>
+<span class="sd">        :return Object:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_part_dir_for_index</span><span class="p">(</span><span class="n">index</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Object.get_parts"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_parts">[docs]</a>    <span class="k">def</span> <span class="nf">get_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all sub-objects of this object.</span>
+
+<span class="sd">        :return List[Object]:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sub_objects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">())</span> <span class="k">if</span>
+                      <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">(),</span> <span class="n">d</span><span class="p">))]:</span>
+                <span class="k">if</span> <span class="n">_is_part_dir_format</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+                    <span class="n">sub_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Object</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">(),</span> <span class="n">d</span><span class="p">)))</span>
+        <span class="n">sub_objects</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sub_objects</span></div>
+
+<div class="viewcode-block" id="Object.copy"><a class="viewcode-back" href="../../utils.html#utils.object.Object.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy the whole contents of this object to a new location.</span>
+
+<span class="sd">        :param str path: The new location on the file system</span>
+<span class="sd">        :return Object: A new object instance representing the copy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">copy_tree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Object.get_parts_dir"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_parts_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_parts_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to the parts directory.</span>
+
+<span class="sd">        :return str:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARTS_DIR</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Object.get_data_dir"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_data_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to the data directory.</span>
+
+<span class="sd">        :return str:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA_DIR</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Object.get_representation_dir"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_representation_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_representation_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">representation</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path to a representation directory.</span>
+
+<span class="sd">        :param str representation: The name of the representation</span>
+<span class="sd">        :return str:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data_dir</span><span class="p">(),</span> <span class="n">representation</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_part_dir_for_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">part_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{Object.PART_PREFIX}</span><span class="s2">{str(index).zfill(4)}&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parts_dir</span><span class="p">(),</span> <span class="n">part_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Object.get_parent"><a class="viewcode-back" href="../../utils.html#utils.object.Object.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the parent Object if this is a part.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;parts/part_&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Object</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_is_part_dir_format</span><span class="p">(</span><span class="n">dir_name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Object</span><span class="o">.</span><span class="n">PART_PREFIX</span> <span class="ow">in</span> <span class="n">dir_name</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

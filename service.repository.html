@@ -1,0 +1,388 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>service.repository package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="service-repository-package">
+<h1>service.repository package<a class="headerlink" href="#service-repository-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-service.repository.repository_controller">
+<span id="service-repository-repository-controller-module"></span><h2>service.repository.repository_controller module<a class="headerlink" href="#module-service.repository.repository_controller" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="service.repository.repository_controller.get_file">
+<code class="descclassname">service.repository.repository_controller.</code><code class="descname">get_file</code><span class="sig-paren">(</span><em>object_id</em>, <em>rep_name</em>, <em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/repository/repository_controller.html#get_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.repository.repository_controller.get_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file from a representation of a cilantro (sub)object.</p>
+<p>Returns the file’s content</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/file/&lt;object_id&gt;/data/&lt;rep_name&gt;/&lt;file&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p>Note that for sub-object the ‘object_id’ looks like:
+“&lt;parent-object_id&gt;/part_0001”</p>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;file_not_found&quot;,
+        &quot;message&quot;: &quot;No file test_file.jpg was found in representation
+            jpg of object test_object&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Accept:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">application/json</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the object</li>
+<li><strong>rep_name</strong> (<em>str</em>) – The name of the representation</li>
+<li><strong>file</strong> (<em>str</em>) – The name of the file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Resheader Content-Type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">application/json</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status 200:</th><td class="field-body"><p class="first">OK</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status 404:</th><td class="field-body"><p class="first">file was not found</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Downloadable file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="service.repository.repository_controller.get_meta_file">
+<code class="descclassname">service.repository.repository_controller.</code><code class="descname">get_meta_file</code><span class="sig-paren">(</span><em>object_id</em>, <em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/repository/repository_controller.html#get_meta_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.repository.repository_controller.get_meta_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file from the root of a cilantro (sub)object.</p>
+<p>Returns the file’s content. Files on root level are normally metdata files.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/file/&lt;object_id&gt;/&lt;file&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;file_not_found&quot;,
+        &quot;message&quot;: &quot;No file test_file.jpg was found in object
+            test_object&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Accept:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">application/json</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the object</li>
+<li><strong>file</strong> (<em>str</em>) – Name of the file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Resheader Content-Type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">application/json</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status 200:</th><td class="field-body"><p class="first">OK</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status 404:</th><td class="field-body"><p class="first">file was not found</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Downloadable file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="service.repository.repository_controller.get_object">
+<code class="descclassname">service.repository.repository_controller.</code><code class="descname">get_object</code><span class="sig-paren">(</span><em>object_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/repository/repository_controller.html#get_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.repository.repository_controller.get_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an cilantro (sub)object in the repository folder.</p>
+<p>Returns A JSON object containing metadata, representations and sub_objects
+of the cilantro object. This can be a subobject as well.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/object/&lt;object_id&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;metadata&quot;: {
+        &quot;description&quot;: &quot;[PDFs teilweise verfugbar]&quot;,
+        &quot;identification&quot;: &quot;year&quot;,
+        &quot;importFilePath&quot;: &quot;e2e-testing.pdf&quot;,
+        &quot;number&quot;: &quot;&quot;,
+        &quot;ojs_id&quot;: &quot;issue-test-188&quot;,
+        &quot;volume&quot;: &quot;&quot;,
+        &quot;year&quot;: 2018
+    },
+    &quot;representations&quot;: [
+        &quot;origin&quot;
+    ],
+    &quot;sub_objects&quot;: [
+        &quot;part_0001&quot;,
+        &quot;part_0002&quot;
+    ]
+}
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;object_not_found&quot;,
+        &quot;message&quot;: &quot;No object with id test_object was found&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Accept:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">application/json</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object_id</strong> (<em>str</em>) – The id of the object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Resheader Content-Type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">application/json</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status 200:</th><td class="field-body">OK</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status 404:</th><td class="field-body">cilantro object was not found</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON object containing metadata, representations and sub_objects
+of the cilantro (sub)object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="service.repository.repository_controller.get_representation">
+<code class="descclassname">service.repository.repository_controller.</code><code class="descname">get_representation</code><span class="sig-paren">(</span><em>object_id</em>, <em>rep_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/repository/repository_controller.html#get_representation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.repository.repository_controller.get_representation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a representation of a cilantro (sub)object.</p>
+<p>Returns A JSON array containing all files of the representation.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/representation/&lt;object_id&gt;/&lt;rep_name&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[
+  &quot;merged.pdf&quot;
+]
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;representation_not_found&quot;,
+        &quot;message&quot;: &quot;No representation jpg for object with id
+            test_object was found&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Accept:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">application/json</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the (sub) object</li>
+<li><strong>rep_name</strong> (<em>str</em>) – The name of the representation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Resheader Content-Type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">application/json</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status 200:</th><td class="field-body"><p class="first">OK</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status 404:</th><td class="field-body"><p class="first">representation was not found</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON array containing all files of the representation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="service.repository.repository_controller.list_repository">
+<code class="descclassname">service.repository.repository_controller.</code><code class="descname">list_repository</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/service/repository/repository_controller.html#list_repository"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#service.repository.repository_controller.list_repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the ids of all cilantro objects in the repository.</p>
+<p>Returns a list of the object_ids</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[&quot;foo&quot;, &quot;bar&quot;]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Accept:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">application/json</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Resheader Content-Type:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">application/json</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status 200:</th><td class="field-body">OK</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON array containing the ids of all cilantro objects in the
+repository</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-service.repository">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-service.repository" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/service.repository.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

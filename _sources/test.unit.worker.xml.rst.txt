@@ -1,0 +1,30 @@
+test.unit.worker.xml package
+============================
+
+Submodules
+----------
+
+test.unit.worker.xml.test\_generate\_xml module
+-----------------------------------------------
+
+.. automodule:: test.unit.worker.xml.test_generate_xml
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.xml.test\_validate\_xml module
+-----------------------------------------------
+
+.. automodule:: test.unit.worker.xml.test_validate_xml
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.worker.xml
+    :members:
+    :undoc-members:
+    :show-inheritance:

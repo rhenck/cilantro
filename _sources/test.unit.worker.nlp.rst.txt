@@ -1,0 +1,30 @@
+test.unit.worker.nlp package
+============================
+
+Submodules
+----------
+
+test.unit.worker.nlp.test\_annotate module
+------------------------------------------
+
+.. automodule:: test.unit.worker.nlp.test_annotate
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+test.unit.worker.nlp.text\_analyzer\_mock module
+------------------------------------------------
+
+.. automodule:: test.unit.worker.nlp.text_analyzer_mock
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: test.unit.worker.nlp
+    :members:
+    :undoc-members:
+    :show-inheritance:

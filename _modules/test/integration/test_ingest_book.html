@@ -1,0 +1,201 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.integration.test_ingest_book &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for test.integration.test_ingest_book</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="n">mysql</span>
+<span class="kn">from</span> <span class="nn">utils.repository</span> <span class="k">import</span> <span class="n">generate_repository_path</span>
+
+<span class="kn">from</span> <span class="nn">test.integration.job_type_test</span> <span class="k">import</span> <span class="n">JobTypeTest</span>
+
+
+<div class="viewcode-block" id="IngestBookTest"><a class="viewcode-back" href="../../../test.integration.html#test.integration.test_ingest_book.IngestBookTest">[docs]</a><span class="k">class</span> <span class="nc">IngestBookTest</span><span class="p">(</span><span class="n">JobTypeTest</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test ingest-book task.</span>
+
+<span class="sd">    Creates a task from example data in the test-resource folder</span>
+<span class="sd">    and makes some checks for generated files.</span>
+
+<span class="sd">    Cleans up any generated files and database entries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">test_object_id</span> <span class="o">=</span> <span class="s2">&quot;test_object_2342&quot;</span>
+
+<div class="viewcode-block" id="IngestBookTest.tearDown"><a class="viewcode-back" href="../../../test.integration.html#test.integration.test_ingest_book.IngestBookTest.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleanup after test run.</span>
+
+<span class="sd">        Remove created database entries, staging files and repository object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_clean_database_entries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arachne_book_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unstage_resource</span><span class="p">(</span><span class="s1">&#39;some_tiffs&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_object_from_repository</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tearDown</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IngestBookTest.test_success"><a class="viewcode-back" href="../../../test.integration.html#test.integration.test_ingest_book.IngestBookTest.test_success">[docs]</a>    <span class="k">def</span> <span class="nf">test_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test ingest book task chain.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage_resource</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="s1">&#39;some_tiffs&#39;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_params_from_file</span><span class="p">(</span><span class="s1">&#39;params&#39;</span><span class="p">,</span> <span class="s1">&#39;a_book.json&#39;</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="p">,</span> <span class="n">status_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_job</span><span class="p">(</span><span class="s1">&#39;ingest_book&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">202</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;Accepted&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assert_job_successful</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;task_ids&#39;</span><span class="p">])</span>
+
+        <span class="n">files_generated</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;data/jpg/test.jpg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;data/jpg/test2.jpg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;data/jpg/test3.jpg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;data/jpg/test4.jpg&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;data/pdf/merged.pdf&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;meta.json&#39;</span>
+            <span class="p">]</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_generated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assert_file_in_repository</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+        <span class="c1"># Get arachne ID from metadata file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repository_dir</span><span class="p">,</span>
+                               <span class="n">generate_repository_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">),</span>
+                               <span class="s1">&#39;meta.json&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">metadata_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arachne_book_id</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">metadata_file</span><span class="p">)[</span><span class="s1">&#39;arachne_id&#39;</span><span class="p">]</span>
+
+        <span class="n">cloud_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bookscan_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">,</span>
+                         <span class="s1">&#39;BOOK-&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span> <span class="o">+</span> <span class="s1">&#39;-0_test.jpg&#39;</span><span class="p">),</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tei_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">,</span>
+                         <span class="s1">&#39;transcription.xml&#39;</span><span class="p">),</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptif_dir</span><span class="p">,</span>
+                         <span class="n">_generate_folder_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">arachne_book_id</span><span class="p">),</span>
+                         <span class="s1">&#39;BOOK-&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span> <span class="o">+</span> <span class="s1">&#39;-0_test.ptif&#39;</span><span class="p">),</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">,</span> <span class="s1">&#39;Rohscans&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;BOOK-&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span> <span class="o">+</span> <span class="s1">&#39;-0_test.tif&#39;</span><span class="p">),</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span><span class="p">,</span>
+                         <span class="s1">&#39;datenbankfertig&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;BOOK-&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span> <span class="o">+</span> <span class="s1">&#39;-0_test.jpg&#39;</span><span class="p">),</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pdf_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_object_id</span> <span class="o">+</span> <span class="s1">&#39;.pdf.zip&#39;</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">cloud_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">())</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_generate_folder_name</span><span class="p">(</span><span class="n">object_id</span><span class="p">,</span> <span class="n">book_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate folder name in the cloud from Xenon and Arachne IDs.&quot;&quot;&quot;</span>
+    <span class="n">formatted_book_id</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:06d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">book_id</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;BOOK-ZID</span><span class="si">{object_id}</span><span class="s2">-AraID</span><span class="si">{formatted_book_id}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_clean_database_entries</span><span class="p">(</span><span class="n">arachne_book_id</span><span class="p">):</span>
+    <span class="n">book_delete_query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;DELETE FROM arachne.buch &quot;</span>
+                         <span class="n">f</span><span class="s2">&quot;WHERE PS_BuchID = </span><span class="si">{arachne_book_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">mysql</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">book_delete_query</span><span class="p">)</span>
+
+    <span class="n">page_delete_query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;DELETE FROM arachne.buchseite &quot;</span>
+                         <span class="n">f</span><span class="s2">&quot;WHERE FS_BuchID = </span><span class="si">{arachne_book_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">mysql</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">page_delete_query</span><span class="p">)</span>
+
+    <span class="n">image_delete_query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;DELETE FROM arachne.marbilder &quot;</span>
+                          <span class="n">f</span><span class="s2">&quot;WHERE FS_BuchID=</span><span class="si">{arachne_book_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">mysql</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">image_delete_query</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

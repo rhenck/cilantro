@@ -1,0 +1,339 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.unit.worker.convert package &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="test-unit-worker-convert-package">
+<h1>test.unit.worker.convert package<a class="headerlink" href="#test-unit-worker-convert-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-test.unit.worker.convert.convert_test">
+<span id="test-unit-worker-convert-convert-test-module"></span><h2>test.unit.worker.convert.convert_test module<a class="headerlink" href="#module-test.unit.worker.convert.convert_test" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.convert_test.ConvertTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.convert_test.</code><code class="descname">ConvertTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/convert_test.html#ConvertTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.convert_test.ConvertTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Base class for conversion tests.</p>
+<p>Ensures the test working dir is created before and removed after each test.</p>
+<p>Make sure to explicitly call super().setUp() and super().tearDown() if
+you need to extend these methods.</p>
+<dl class="attribute">
+<dt id="test.unit.worker.convert.convert_test.ConvertTest.resource_dir">
+<code class="descname">resource_dir</code><em class="property"> = 'test/resources'</em><a class="headerlink" href="#test.unit.worker.convert.convert_test.ConvertTest.resource_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.convert_test.ConvertTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/convert_test.html#ConvertTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.convert_test.ConvertTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.convert_test.ConvertTest.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/convert_test.html#ConvertTest.tearDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.convert_test.ConvertTest.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for deconstructing the test fixture after testing it.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="test.unit.worker.convert.convert_test.ConvertTest.working_dir">
+<code class="descname">working_dir</code><em class="property"> = 'test_data'</em><a class="headerlink" href="#test.unit.worker.convert.convert_test.ConvertTest.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_convert_image">
+<span id="test-unit-worker-convert-test-convert-image-module"></span><h2>test.unit.worker.convert.test_convert_image module<a class="headerlink" href="#module-test.unit.worker.convert.test_convert_image" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_convert_image.ConvertImageTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_convert_image.</code><code class="descname">ConvertImageTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_convert_image.html#ConvertImageTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_convert_image.ConvertImageTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Test the image scaling functions.</p>
+<p>Basically just taking an existing image file, passing it to the function
+with arbitrary parameters and checking if another file was generated.</p>
+<dl class="attribute">
+<dt id="test.unit.worker.convert.test_convert_image.ConvertImageTest.resource_dir">
+<code class="descname">resource_dir</code><em class="property"> = 'test/resources'</em><a class="headerlink" href="#test.unit.worker.convert.test_convert_image.ConvertImageTest.resource_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_convert_image.ConvertImageTest.test_keep_ratio_tif">
+<code class="descname">test_keep_ratio_tif</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_convert_image.html#ConvertImageTest.test_keep_ratio_tif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_convert_image.ConvertImageTest.test_keep_ratio_tif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test scaling for TIF type image if keep_ratio is False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_convert_image.ConvertImageTest.test_scale_jpg">
+<code class="descname">test_scale_jpg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_convert_image.html#ConvertImageTest.test_scale_jpg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_convert_image.ConvertImageTest.test_scale_jpg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test scaling for JPEG type image.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_convert_image.ConvertImageTest.test_scale_tif">
+<code class="descname">test_scale_tif</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_convert_image.html#ConvertImageTest.test_scale_tif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_convert_image.ConvertImageTest.test_scale_tif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test scaling for TIF type image.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_cut_pdf">
+<span id="test-unit-worker-convert-test-cut-pdf-module"></span><h2>test.unit.worker.convert.test_cut_pdf module<a class="headerlink" href="#module-test.unit.worker.convert.test_cut_pdf" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_cut_pdf.CutPdfTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_cut_pdf.</code><code class="descname">CutPdfTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_cut_pdf.html#CutPdfTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_cut_pdf.CutPdfTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<dl class="method">
+<dt id="test.unit.worker.convert.test_cut_pdf.CutPdfTest.test_cut_pdf">
+<code class="descname">test_cut_pdf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_cut_pdf.html#CutPdfTest.test_cut_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_cut_pdf.CutPdfTest.test_cut_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test cutting PDF into multiple files by page numbers.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_jpg_to_pdf">
+<span id="test-unit-worker-convert-test-jpg-to-pdf-module"></span><h2>test.unit.worker.convert.test_jpg_to_pdf module<a class="headerlink" href="#module-test.unit.worker.convert.test_jpg_to_pdf" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_jpg_to_pdf.Jpg2PdfTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_jpg_to_pdf.</code><code class="descname">Jpg2PdfTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_jpg_to_pdf.html#Jpg2PdfTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_jpg_to_pdf.Jpg2PdfTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<dl class="method">
+<dt id="test.unit.worker.convert.test_jpg_to_pdf.Jpg2PdfTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_jpg_to_pdf.html#Jpg2PdfTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_jpg_to_pdf.Jpg2PdfTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_jpg_to_pdf.Jpg2PdfTest.test_success">
+<code class="descname">test_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_jpg_to_pdf.html#Jpg2PdfTest.test_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_jpg_to_pdf.Jpg2PdfTest.test_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_pdf_to_tif">
+<span id="test-unit-worker-convert-test-pdf-to-tif-module"></span><h2>test.unit.worker.convert.test_pdf_to_tif module<a class="headerlink" href="#module-test.unit.worker.convert.test_pdf_to_tif" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_pdf_to_tif.PdfToTifTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_pdf_to_tif.</code><code class="descname">PdfToTifTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_pdf_to_tif.html#PdfToTifTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_pdf_to_tif.PdfToTifTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<dl class="method">
+<dt id="test.unit.worker.convert.test_pdf_to_tif.PdfToTifTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_pdf_to_tif.html#PdfToTifTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_pdf_to_tif.PdfToTifTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_pdf_to_tif.PdfToTifTest.test_success">
+<code class="descname">test_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_pdf_to_tif.html#PdfToTifTest.test_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_pdf_to_tif.PdfToTifTest.test_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_pdf_to_txt">
+<span id="test-unit-worker-convert-test-pdf-to-txt-module"></span><h2>test.unit.worker.convert.test_pdf_to_txt module<a class="headerlink" href="#module-test.unit.worker.convert.test_pdf_to_txt" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_pdf_to_txt.PdfToTxtTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_pdf_to_txt.</code><code class="descname">PdfToTxtTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_pdf_to_txt.html#PdfToTxtTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_pdf_to_txt.PdfToTxtTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<dl class="method">
+<dt id="test.unit.worker.convert.test_pdf_to_txt.PdfToTxtTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_pdf_to_txt.html#PdfToTxtTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_pdf_to_txt.PdfToTxtTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_pdf_to_txt.PdfToTxtTest.test_success">
+<code class="descname">test_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_pdf_to_txt.html#PdfToTxtTest.test_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_pdf_to_txt.PdfToTxtTest.test_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_tif_to_jpg">
+<span id="test-unit-worker-convert-test-tif-to-jpg-module"></span><h2>test.unit.worker.convert.test_tif_to_jpg module<a class="headerlink" href="#module-test.unit.worker.convert.test_tif_to_jpg" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_tif_to_jpg.</code><code class="descname">TifToJpgTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_jpg.html#TifToJpgTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_jpg.html#TifToJpgTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.test_error">
+<code class="descname">test_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_jpg.html#TifToJpgTest.test_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.test_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.test_success">
+<code class="descname">test_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_jpg.html#TifToJpgTest.test_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_jpg.TifToJpgTest.test_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_tif_to_ptif">
+<span id="test-unit-worker-convert-test-tif-to-ptif-module"></span><h2>test.unit.worker.convert.test_tif_to_ptif module<a class="headerlink" href="#module-test.unit.worker.convert.test_tif_to_ptif" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_tif_to_ptif.</code><code class="descname">TifToPTifTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_ptif.html#TifToPTifTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<p>Test conversion of TIFF to PTIFF using imagemagick shell command.</p>
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_ptif.html#TifToPTifTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test preparation by setting up needed paths.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest.test_error">
+<code class="descname">test_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_ptif.html#TifToPTifTest.test_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest.test_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test error case with faulty source TIFF.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest.test_success">
+<code class="descname">test_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_ptif.html#TifToPTifTest.test_success"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_ptif.TifToPTifTest.test_success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert.test_tif_to_txt">
+<span id="test-unit-worker-convert-test-tif-to-txt-module"></span><h2>test.unit.worker.convert.test_tif_to_txt module<a class="headerlink" href="#module-test.unit.worker.convert.test_tif_to_txt" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif">
+<em class="property">class </em><code class="descclassname">test.unit.worker.convert.test_tif_to_txt.</code><code class="descname">GenerateTextFromTif</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_txt.html#GenerateTextFromTif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#test.unit.worker.convert.convert_test.ConvertTest" title="test.unit.worker.convert.convert_test.ConvertTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">test.unit.worker.convert.convert_test.ConvertTest</span></code></a></p>
+<dl class="attribute">
+<dt id="test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.target_file_path">
+<code class="descname">target_file_path</code><em class="property"> = 'test_data/test.converted.txt'</em><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.target_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.test_tif_to_txt">
+<code class="descname">test_tif_to_txt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_txt.html#GenerateTextFromTif.test_tif_to_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.test_tif_to_txt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.test_tif_to_txt_wrong_language">
+<code class="descname">test_tif_to_txt_wrong_language</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/test/unit/worker/convert/test_tif_to_txt.html#GenerateTextFromTif.test_tif_to_txt_wrong_language"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.test_tif_to_txt_wrong_language" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.tif_path">
+<code class="descname">tif_path</code><em class="property"> = 'test/resources/files/test.tif'</em><a class="headerlink" href="#test.unit.worker.convert.test_tif_to_txt.GenerateTextFromTif.tif_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-test.unit.worker.convert">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-test.unit.worker.convert" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/test.unit.worker.convert.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,326 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>workers.convert.tasks &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for workers.convert.tasks</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">utils.celery_client</span> <span class="k">import</span> <span class="n">celery_app</span>
+<span class="kn">from</span> <span class="nn">workers.base_task</span> <span class="k">import</span> <span class="n">BaseTask</span><span class="p">,</span> <span class="n">FileTask</span>
+<span class="kn">from</span> <span class="nn">utils.object</span> <span class="k">import</span> <span class="n">Object</span>
+<span class="kn">from</span> <span class="nn">workers.convert.convert_image</span> <span class="k">import</span> <span class="n">convert_tif_to_jpg</span><span class="p">,</span> \
+    <span class="n">convert_jpg_to_pdf</span><span class="p">,</span> <span class="n">tif_to_txt</span><span class="p">,</span> <span class="n">convert_tif_to_ptif</span>
+<span class="kn">from</span> <span class="nn">workers.convert.convert_pdf</span> <span class="k">import</span> <span class="n">convert_pdf_to_txt</span><span class="p">,</span> <span class="n">split_merge_pdf</span><span class="p">,</span> \
+    <span class="n">convert_pdf_to_tif</span>
+<span class="kn">from</span> <span class="nn">workers.convert.image_scaling</span> <span class="k">import</span> <span class="n">scale_image</span>
+
+
+<span class="k">def</span> <span class="nf">_extract_basename</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">file</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">files</span>
+
+
+<span class="k">def</span> <span class="nf">_list_files</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">extension</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_get_target_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="n">target_extension</span><span class="p">):</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">new_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span>
+                                              <span class="n">f</span><span class="s2">&quot;.</span><span class="si">{target_extension}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">new_name</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MergeConvertedPdfTask"><a class="viewcode-back" href="../../../workers.convert.html#workers.convert.tasks.MergeConvertedPdfTask">[docs]</a><span class="k">class</span> <span class="nc">MergeConvertedPdfTask</span><span class="p">(</span><span class="n">BaseTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge all pdf files in a representation into one.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -representation: The name of the representation</span>
+
+<span class="sd">    Preconditions:</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    -merged.pdf in the given representation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.merge_converted_pdf&quot;</span>
+
+<div class="viewcode-block" id="MergeConvertedPdfTask.execute_task"><a class="viewcode-back" href="../../../workers.convert.html#workers.convert.tasks.MergeConvertedPdfTask.execute_task">[docs]</a>    <span class="k">def</span> <span class="nf">execute_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;representation&#39;</span><span class="p">)</span>
+        <span class="n">rep_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_work_path</span><span class="p">(),</span> <span class="n">Object</span><span class="o">.</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)}</span>
+                 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_list_files</span><span class="p">(</span><span class="n">rep_dir</span><span class="p">,</span> <span class="s1">&#39;.pdf&#39;</span><span class="p">)]</span>
+        <span class="n">split_merge_pdf</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">rep_dir</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">JpgToPdfTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a one paged pdf with a jpg.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str file: Path to a jpg file that should be converted to pdf</span>
+<span class="sd">    -str target: Name of the representation the created file will be added to</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    -file in the representation</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    -&lt;file_name&gt;.pdf in the working dir.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.jpg_to_pdf&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">convert_jpg_to_pdf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">_get_target_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">TifToJpgTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a jpg file from a tif.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str file: Path to the tif file</span>
+<span class="sd">    -str target: Name of the representation the created file will be added to</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    -file in the representation</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    -&lt;file_name&gt;.jpg in the working dir</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.tif_to_jpg&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">convert_tif_to_jpg</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">_get_target_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;jpg&#39;</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">PdfToTxtTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract text from a pdf and create a txt file for every page.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str file: Path to the pdf file</span>
+<span class="sd">    -str target: Name of the representation the created file will be added to</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    -file in the representation</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    -for each page in file:</span>
+<span class="sd">        -page.&lt;page_no&gt;.txt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.pdf_to_txt&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">convert_pdf_to_txt</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">PdfToTifTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a tif file for every page of a pdf.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str file: The path to the pdf file</span>
+<span class="sd">    -str target: Name of the representation the created files will be added to</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    -file in the representation</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    -for each page in file:</span>
+<span class="sd">        -&lt;page_no&gt;.tif</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.pdf_to_tif&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">convert_pdf_to_tif</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TifToTxtTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Do OCR on a tif file and save the results as txt.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str file: The path of the tif file</span>
+<span class="sd">    -str target: Name of the representation the created file will be added to</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    -file in the representation</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    -&lt;file_name&gt;.txt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.tif_to_txt&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">lang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;ocr_lang&quot;</span><span class="p">)</span>
+        <span class="n">tif_to_txt</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">_get_target_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;txt&#39;</span><span class="p">),</span> <span class="n">lang</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ScaleImageTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create copies of image files with new proportions.</span>
+
+<span class="sd">    If selected the ratio will be kept.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str image_max_width: width of the generated image file</span>
+<span class="sd">    -str image_max_height: height of the generated image file</span>
+<span class="sd">    -bool keep_ratio: keeps the ratio of the generated image file</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    - image files existing in format JPEG or TIFF</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    - scaled copies of images</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.scale_image&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read parameters and call the actual function.&quot;&quot;&quot;</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;max_width&#39;</span><span class="p">))</span>
+        <span class="n">max_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;max_height&#39;</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">keep_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s1">&#39;keep_ratio&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">keep_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">scale_image</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="n">max_width</span><span class="p">,</span> <span class="n">max_height</span><span class="p">,</span> <span class="n">keep_ratio</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TifToPTifTask</span><span class="p">(</span><span class="n">FileTask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create copies of image files as PTIF.</span>
+
+<span class="sd">    TaskParams:</span>
+<span class="sd">    -str file: The path to the pdf file</span>
+<span class="sd">    -str target: Name of the representation the created files will be added to</span>
+
+<span class="sd">    Preconditions:</span>
+<span class="sd">    -file in the representation</span>
+
+<span class="sd">    Creates:</span>
+<span class="sd">    - PTIF representation of all TIFFs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;convert.tif_to_ptif&quot;</span>
+
+    <span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">convert_tif_to_ptif</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">)</span>
+
+
+<span class="n">ScaleImageTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">ScaleImageTask</span><span class="p">())</span>
+<span class="n">JpgToPdfTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">JpgToPdfTask</span><span class="p">())</span>
+<span class="n">MergeConvertedPdf</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">MergeConvertedPdfTask</span><span class="p">())</span>
+<span class="n">TifToJpgTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">TifToJpgTask</span><span class="p">())</span>
+<span class="n">PdfToTifTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">PdfToTifTask</span><span class="p">())</span>
+<span class="n">PdfToTxtTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">PdfToTxtTask</span><span class="p">())</span>
+<span class="n">TifToTxtTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">TifToTxtTask</span><span class="p">())</span>
+<span class="n">TifToPTifTask</span> <span class="o">=</span> <span class="n">celery_app</span><span class="o">.</span><span class="n">register_task</span><span class="p">(</span><span class="n">TifToPTifTask</span><span class="p">())</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

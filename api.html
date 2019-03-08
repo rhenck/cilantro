@@ -1,0 +1,1427 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>API Documentation &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Cilantro’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="20%" />
+<col width="45%" />
+<col width="35%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Resource</th>
+<th class="head">Operation</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Job Controller</td>
+<td><a class="reference external" href="#get--job-jobs">GET /job/jobs</a></td>
+<td>List jobs of the user</td>
+</tr>
+<tr class="row-odd"><td>&#160;</td>
+<td><a class="reference external" href="#post--job-(job_type)">POST /job/(job_type)</a></td>
+<td>Create a job of the specified job type</td>
+</tr>
+<tr class="row-even"><td>&#160;</td>
+<td><a class="reference external" href="#get--job-(job_id)">GET /job/(job_id)</a></td>
+<td>Status information for a job</td>
+</tr>
+<tr class="row-odd"><td>Job Type Controller</td>
+<td><a class="reference external" href="#get--job_types">GET /job_types</a></td>
+<td>List of job types and meta information</td>
+</tr>
+<tr class="row-even"><td>&#160;</td>
+<td><a class="reference external" href="#get--job_types-(job_type)">GET /job_types/(job_type)</a></td>
+<td>Contents of the job type definition file</td>
+</tr>
+<tr class="row-odd"><td>Repository Controller</td>
+<td><a class="reference external" href="#get--repository">GET /repository</a></td>
+<td>List IDs of objects in the repository</td>
+</tr>
+<tr class="row-even"><td>&#160;</td>
+<td><a class="reference external" href="#get--repository-file-(path-object_id)-data-(path-rep_name)-(file)">GET /repository/file/(path:object_id)/data/(path:rep_name)/(file)</a></td>
+<td>Retrieve a file from a representation</td>
+</tr>
+<tr class="row-odd"><td>&#160;</td>
+<td><a class="reference external" href="#get--repository-representation-(path-object_id)-(rep_name)">GET /repository/representation/(path:object_id)/(rep_name)</a></td>
+<td>Retrieve a (sub)object representation</td>
+</tr>
+<tr class="row-even"><td>&#160;</td>
+<td><a class="reference external" href="#get--repository-object-(path-object_id)">GET /repository/object/(path:object_id)</a></td>
+<td>Retrieve (sub)object in the repository</td>
+</tr>
+<tr class="row-odd"><td>&#160;</td>
+<td><a class="reference external" href="#get--repository-file-(path-object_id)-(file)">GET /repository/file/(path:object_id)/(file)</a></td>
+<td>Retrieve metadatafile of (sub)object</td>
+</tr>
+<tr class="row-even"><td>Staging Controller</td>
+<td><a class="reference external" href="#get--staging">GET /staging</a></td>
+<td>List files/dirs in the staging area</td>
+</tr>
+<tr class="row-odd"><td>&#160;</td>
+<td><a class="reference external" href="#post--staging">POST /staging</a></td>
+<td>Upload files to the staging area</td>
+</tr>
+<tr class="row-even"><td>&#160;</td>
+<td><a class="reference external" href="#delete--staging-(path-path)">DELETE /staging/(path:path)</a></td>
+<td>Delete file or dir from the staging area</td>
+</tr>
+<tr class="row-odd"><td>&#160;</td>
+<td><a class="reference external" href="#get--staging-(path-path)">GET /staging/(path:path)</a></td>
+<td>Retrieve file/folder from staging folder</td>
+</tr>
+<tr class="row-even"><td>User Controller</td>
+<td><a class="reference external" href="#get--user-(user_name)">GET /user/(user_name)</a></td>
+<td>Retrieve user information</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="api-details">
+<h2>API Details<a class="headerlink" href="#api-details" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--job-jobs">
+<code class="descname">GET </code><code class="descname">/job/jobs</code><a class="headerlink" href="#get--job-jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>List jobs of the user.</p>
+<p>List jobs of the user updated less than a week ago and all jobs, which were
+not successful.
+If show_all_jobs is set True it returns all jobs.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/jobs/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response SUCCESS</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[
+    {
+        &quot;created&quot;: &quot;Tue, 30 Oct 2018 14:06:32 GMT&quot;,
+        &quot;errors&quot;: [],
+        &quot;job_id&quot;: &quot;010819cc-dc4d-11e8-b152-0242ac130008&quot;,
+        &quot;job_type&quot;: &quot;ingest_journal&quot;,
+        &quot;name&quot;: &quot;JOB-ingest_journal-test.pdf&quot;
+        &quot;state&quot;: &quot;success&quot;,
+        &quot;task_ids&quot;: [
+            &quot;9331a617-d35f-4b1a-be24-ec7a970c480e&quot;,
+            &quot;f012ef11-1ac0-4810-986a-c31335b918fb&quot;,
+            &quot;628abc60-2767-484a-a5c3-0b5a9c1a1ef6&quot;,
+            &quot;c2a97fd1-28d2-4e97-b41f-67b6f70d91df&quot;,
+            &quot;85cd98a7-fe3f-4e42-91f8-504c074be263&quot;,
+            &quot;5af3a39c-f837-41df-8a5e-ecdc55a2bef6&quot;,
+            &quot;2576d860-b694-4d41-8190-092f45837c37&quot;,
+            &quot;8b7e956a-2fc1-446f-9cc8-9f1d63471b2a&quot;,
+            &quot;d2d337a7-f346-4b7e-b1f8-4ee4942716f5&quot;,
+            &quot;94304191-45fd-45f0-937c-02a6b13fb64c&quot;,
+            &quot;b283d505-4174-4a46-909a-1f742dad6047&quot;,
+            &quot;010819cc-dc4d-11e8-b152-0242ac130008&quot;
+        ],
+        &quot;updated&quot;: &quot;Tue, 30 Oct 2018 14:06:59 GMT&quot;,
+        &quot;user&quot;: &quot;test_user&quot;
+    },
+    {
+        &quot;created&quot;: &quot;Tue, 30 Oct 2018 14:07:04 GMT&quot;,
+        &quot;errors&quot;: [],
+        &quot;job_id&quot;: &quot;147b74cc-dc4d-11e8-8db4-0242ac130008&quot;,
+        &quot;job_type&quot;: &quot;ingest_journal&quot;,
+        &quot;name&quot;: &quot;JOB-ingest_journal-test.pdf&quot;
+        &quot;state&quot;: &quot;success&quot;,
+        &quot;task_ids&quot;: [
+            &quot;55614d2e-e442-46f8-8708-029c8e83c37f&quot;,
+            &quot;92ef0e6e-f54c-4bd0-8079-08353d8ed3ea&quot;,
+            &quot;e80224ec-e80f-456d-a02d-0d330f106454&quot;,
+            &quot;feaa2a85-edc7-4d55-9a07-1940946445bb&quot;,
+            &quot;c1c554d5-a37b-4342-80b3-a5cdecab652c&quot;,
+            &quot;71c634ed-fe73-4e2e-8f60-ce92109c3dcd&quot;,
+            &quot;bb073bbe-1489-495f-9bb2-80343a6f2160&quot;,
+            &quot;fd393611-c344-4ed2-b090-ee8b95a337ec&quot;,
+            &quot;7b8eceec-aab5-4edf-8a2b-d38981a07911&quot;,
+            &quot;6a4f5fe6-6e25-4151-b114-548473f85f82&quot;,
+            &quot;484f9623-2ae0-4969-b513-4f99dab1486e&quot;,
+            &quot;147b74cc-dc4d-11e8-8db4-0242ac130008&quot;
+        ],
+        &quot;updated&quot;: &quot;Tue, 30 Oct 2018 14:07:17 GMT&quot;,
+        &quot;user&quot;: &quot;test_user&quot;
+    }
+]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>show_all_jobs</strong> – (optional) if ‘True’, all jobs are listed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">A JSON object containing the list of job objects</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--repository">
+<code class="descname">GET </code><code class="descname">/repository</code><a class="headerlink" href="#get--repository" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the ids of all cilantro objects in the repository.</p>
+<p>Returns a list of the object_ids</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[&quot;foo&quot;, &quot;bar&quot;]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">JSON array containing the ids of all cilantro objects in the
+repository</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--job_types">
+<code class="descname">GET </code><code class="descname">/job_types</code><a class="headerlink" href="#get--job_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a JSON list of available job types and their meta information.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/job_types/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[
+    {
+        &quot;about&quot;: {
+            &quot;description&quot;: &quot;Create a new Issue of an existing
+                            journal, and upload it&#39;s files to
+                            iDAI.publications/journals&quot;,
+            &quot;tags&quot;: [
+                &quot;OJS&quot;,
+                &quot;iDAI.publications/journals&quot;,
+                &quot;publish&quot;,
+                &quot;journal&quot;,
+                &quot;pdf&quot;
+            ],
+            &quot;title&quot;: &quot;Ingest a Journal-Issue to
+                      iDAI.publications/journals&quot;
+        },
+        &quot;name&quot;: &quot;ingest_journal&quot;
+    },
+    {
+        &quot;about&quot;: {
+            &quot;description&quot;: &quot;Create a new Book afrom single image
+                            files nd upload it to iDAI.repository&quot;,
+            &quot;tags&quot;: [
+                &quot;repository&quot;,
+                &quot;book&quot;,
+                &quot;monography&quot;,
+                &quot;image&quot;,
+                &quot;tiff&quot;
+            ],
+            &quot;title&quot;: &quot;Ingest a complete book to iDAI.repository&quot;
+        },
+        &quot;name&quot;: &quot;ingest_book&quot;
+    }
+]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>dict</strong> – operation result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return str:</th><td class="field-body"><p class="first last">JSON list of objecta containing the type names and
+the about information from the file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--staging">
+<code class="descname">GET </code><code class="descname">/staging</code><a class="headerlink" href="#get--staging" title="Permalink to this definition">¶</a></dt>
+<dd><p>List files and directories in the staging area.</p>
+<p>Returns a complete recursive folder hierarchy.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/staging/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[
+    {
+        &quot;name&quot;: &quot;test.pdf&quot;,
+        &quot;type&quot;: &quot;file&quot;
+    }
+]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">JSON array containing objects for files and folders</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="post">
+<dt id="post--staging">
+<code class="descname">POST </code><code class="descname">/staging</code><a class="headerlink" href="#post--staging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload files to the staging area.</p>
+<p>If the names of the given files contain folders, these are created in the
+staging area if not already present.</p>
+<p>The upload endpoint is able to handle single and multiple files provided
+under any key.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/staging/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response SUCCESS</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+  &quot;result&quot;: {
+      &quot;&lt;filename&gt;&quot;: {
+          &quot;success&quot;: true
+      }
+  }
+}
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">400</span> <span class="ne">BAD REQUEST</span>
+
+{
+  &quot;error&quot;: {
+      &quot;code&quot;: &quot;no_files_provided&quot;,
+      &quot;message&quot;: &quot;The request did not contain any files&quot;
+  },
+  &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – multipart/form-data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Form Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>file</strong> – file to be uploaded</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>dict</strong> – operation result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – no files were provided</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16">415 Unsupported Media Type</a> – one of the files’ extension is not allowed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">a JSON object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--repository-file-(path-object_id)-data-(path-rep_name)-(file)">
+<code class="descname">GET </code><code class="descname">/repository/file/</code><span class="sig-paren">(</span><em class="property">path: </em><em>object_id</em><span class="sig-paren">)</span><code class="descname">/data/</code><span class="sig-paren">(</span><em class="property">path: </em><em>rep_name</em><span class="sig-paren">)</span><code class="descname">/</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#get--repository-file-(path-object_id)-data-(path-rep_name)-(file)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file from a representation of a cilantro (sub)object.</p>
+<p>Returns the file’s content</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/file/&lt;object_id&gt;/data/&lt;rep_name&gt;/&lt;file&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p>Note that for sub-object the ‘object_id’ looks like:
+“&lt;parent-object_id&gt;/part_0001”</p>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;file_not_found&quot;,
+        &quot;message&quot;: &quot;No file test_file.jpg was found in representation
+            jpg of object test_object&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the object</li>
+<li><strong>rep_name</strong> (<em>str</em>) – The name of the representation</li>
+<li><strong>file</strong> (<em>str</em>) – The name of the file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – file was not found</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">Downloadable file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--repository-representation-(path-object_id)-(rep_name)">
+<code class="descname">GET </code><code class="descname">/repository/representation/</code><span class="sig-paren">(</span><em class="property">path: </em><em>object_id</em><span class="sig-paren">)</span><code class="descname">/</code><span class="sig-paren">(</span><em>rep_name</em><span class="sig-paren">)</span><a class="headerlink" href="#get--repository-representation-(path-object_id)-(rep_name)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a representation of a cilantro (sub)object.</p>
+<p>Returns A JSON array containing all files of the representation.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/representation/&lt;object_id&gt;/&lt;rep_name&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+[
+  &quot;merged.pdf&quot;
+]
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;representation_not_found&quot;,
+        &quot;message&quot;: &quot;No representation jpg for object with id
+            test_object was found&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the (sub) object</li>
+<li><strong>rep_name</strong> (<em>str</em>) – The name of the representation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – representation was not found</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">JSON array containing all files of the representation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--repository-object-(path-object_id)">
+<code class="descname">GET </code><code class="descname">/repository/object/</code><span class="sig-paren">(</span><em class="property">path: </em><em>object_id</em><span class="sig-paren">)</span><a class="headerlink" href="#get--repository-object-(path-object_id)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an cilantro (sub)object in the repository folder.</p>
+<p>Returns A JSON object containing metadata, representations and sub_objects
+of the cilantro object. This can be a subobject as well.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/object/&lt;object_id&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;metadata&quot;: {
+        &quot;description&quot;: &quot;[PDFs teilweise verfugbar]&quot;,
+        &quot;identification&quot;: &quot;year&quot;,
+        &quot;importFilePath&quot;: &quot;e2e-testing.pdf&quot;,
+        &quot;number&quot;: &quot;&quot;,
+        &quot;ojs_id&quot;: &quot;issue-test-188&quot;,
+        &quot;volume&quot;: &quot;&quot;,
+        &quot;year&quot;: 2018
+    },
+    &quot;representations&quot;: [
+        &quot;origin&quot;
+    ],
+    &quot;sub_objects&quot;: [
+        &quot;part_0001&quot;,
+        &quot;part_0002&quot;
+    ]
+}
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;object_not_found&quot;,
+        &quot;message&quot;: &quot;No object with id test_object was found&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the object</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – cilantro object was not found</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">JSON object containing metadata, representations and sub_objects
+of the cilantro (sub)object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--repository-file-(path-object_id)-(file)">
+<code class="descname">GET </code><code class="descname">/repository/file/</code><span class="sig-paren">(</span><em class="property">path: </em><em>object_id</em><span class="sig-paren">)</span><code class="descname">/</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#get--repository-file-(path-object_id)-(file)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file from the root of a cilantro (sub)object.</p>
+<p>Returns the file’s content. Files on root level are normally metdata files.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/repository/file/&lt;object_id&gt;/&lt;file&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;file_not_found&quot;,
+        &quot;message&quot;: &quot;No file test_file.jpg was found in object
+            test_object&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_id</strong> (<em>str</em>) – The id of the object</li>
+<li><strong>file</strong> (<em>str</em>) – Name of the file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – file was not found</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">Downloadable file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--job_types-(job_type)">
+<code class="descname">GET </code><code class="descname">/job_types/</code><span class="sig-paren">(</span><em>job_type</em><span class="sig-paren">)</span><a class="headerlink" href="#get--job_types-(job_type)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serve the contents of the YAML file for the job type definition.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/job_types/&lt;job_type&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;about&quot;: {
+        &quot;description&quot;: &quot;Create a new Issue of an existing journal
+                        and upload it&#39;s files to
+                        iDAI.publications/journals&quot;,
+        &quot;tags&quot;: [
+            &quot;OJS&quot;,
+            &quot;iDAI.publications/journals&quot;,
+            &quot;publish&quot;,
+            &quot;journal&quot;,
+            &quot;pdf&quot;
+        ],
+        &quot;title&quot;: &quot;Ingest a Journal-Issue to iDAI.publications/journals&quot;
+    },
+    &quot;schema&quot;: {
+        &quot;$schema&quot;: &quot;http://json-schema.org/draft-07/schema#&quot;,
+        &quot;title&quot;: &quot;Ingest Journal schema&quot;,
+        &quot;description&quot;: &quot;Use to validate ingest-journal job parameters&quot;,
+        &quot;type&quot;: &quot;object&quot;
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+            &quot;metadata&quot;: {
+                &quot;additionalProperties&quot;: false,
+                &quot;properties&quot;: {
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;identification&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;description&quot;,
+                    &quot;identification&quot;
+                ],
+                &quot;type&quot;: &quot;object&quot;
+            }
+        },
+        &quot;required&quot;: [
+            &quot;metadata&quot;
+        ]
+    },
+    &quot;tasks&quot;: [
+        &quot;create_object&quot;,
+        {
+            &quot;foreach&quot;: [
+                {
+                    &quot;do&quot;: [
+                        {
+                            &quot;foreach&quot;: {
+                                &quot;target&quot;: &quot;tif&quot;,
+                                &quot;task&quot;: &quot;convert.pdf_to_tif&quot;
+                            },
+                            &quot;list_files&quot;: &quot;origin&quot;,
+                            &quot;pattern&quot;: &quot;.pdf$&quot;
+                        },
+                        {
+                            &quot;foreach&quot;: {
+                                &quot;target&quot;: &quot;txt&quot;,
+                                &quot;task&quot;: &quot;convert.tif_to_txt&quot;
+                            },
+                            &quot;list_files&quot;: &quot;tif&quot;
+                        },
+                        {
+                            &quot;foreach&quot;: {
+                                &quot;target&quot;: &quot;jpg&quot;,
+                                &quot;task&quot;: &quot;convert.tif_to_jpg&quot;
+                            },
+                            &quot;list_files&quot;: &quot;tif&quot;
+                        }
+                    ],
+                    &quot;else&quot;: [
+                        {
+                            &quot;foreach&quot;: {
+                                &quot;target&quot;: &quot;txt&quot;,
+                                &quot;task&quot;: &quot;convert.pdf_to_txt&quot;
+                            },
+                            &quot;list_files&quot;: &quot;origin&quot;,
+                            &quot;pattern&quot;: &quot;.pdf$&quot;
+                        }
+                    ],
+                    &quot;if&quot;: &quot;do_ocr&quot;
+                },
+                {
+                    &quot;source&quot;: &quot;txt&quot;,
+                    &quot;task&quot;: &quot;nlp.annotate&quot;
+                }
+            ],
+            &quot;list_parts&quot;: null
+        },
+        {
+            &quot;foreach&quot;: {
+                &quot;foreach&quot;: {
+                    &quot;max_height&quot;: 50,
+                    &quot;max_width&quot;: 50,
+                    &quot;target_dir&quot;: &quot;thumbnails&quot;,
+                    &quot;task&quot;: &quot;convert.scale_image&quot;
+                },
+                &quot;list_files&quot;: &quot;jpg&quot;
+            },
+            &quot;list_parts&quot;: null
+        },
+        {
+            &quot;foreach&quot;: {
+                &quot;foreach&quot;: {
+                    &quot;max_height&quot;: 50,
+                    &quot;max_width&quot;: 50,
+                    &quot;task&quot;: &quot;convert.scale_image&quot;
+                },
+                &quot;list_files&quot;: &quot;tif&quot;
+            },
+            &quot;list_parts&quot;: null
+        },
+        {
+            &quot;dtd_file&quot;: &quot;ojs_import.dtd&quot;,
+            &quot;params&quot;: &quot;ojs_metadata&quot;,
+            &quot;target_filename&quot;: &quot;ojs_import.xml&quot;,
+            &quot;task&quot;: &quot;generate_xml&quot;,
+            &quot;template_file&quot;: &quot;ojs_template.xml&quot;
+        },
+        {
+            &quot;foreach&quot;: {
+                &quot;schema_file&quot;: &quot;MARC21slim.xsd&quot;,
+                &quot;target_filename&quot;: &quot;marc.xml&quot;,
+                &quot;task&quot;: &quot;generate_xml&quot;,
+                &quot;template_file&quot;: &quot;marc_template.xml&quot;
+            },
+            &quot;list_parts&quot;: null
+        },
+        {
+            &quot;foreach&quot;: {
+                &quot;schema_file&quot;: &quot;mets.xsd&quot;,
+                &quot;target_filename&quot;: &quot;mets.xml&quot;,
+                &quot;task&quot;: &quot;generate_xml&quot;,
+                &quot;template_file&quot;: &quot;mets_template.xml&quot;
+            },
+            &quot;list_parts&quot;: null
+        },
+        {
+            &quot;params&quot;: &quot;ojs_metadata&quot;,
+            &quot;task&quot;: &quot;publish_to_ojs&quot;
+        },
+        {
+            &quot;foreach&quot;: {
+                &quot;task&quot;: &quot;generate_frontmatter&quot;
+            },
+            &quot;list_parts&quot;: null
+        },
+        &quot;publish_to_repository&quot;,
+        &quot;cleanup_workdir&quot;,
+        &quot;finish_job&quot;
+    ]
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>job_type</strong> (<em>str</em>) – Name of the job type</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>schema</strong> – (optional) if set to ‘true’, parameter schema is served</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>dict</strong> – operation result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">YAML file content of the job type</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="delete">
+<dt id="delete--staging-(path-path)">
+<code class="descname">DELETE </code><code class="descname">/staging/</code><span class="sig-paren">(</span><em class="property">path: </em><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#delete--staging-(path-path)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete file or directory from the staging area.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/staging/&lt;path&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response SUCCESS</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+    {
+        &quot;success&quot;: true
+    }
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+    {
+        &quot;error&quot;: {
+            &quot;code&quot;: &quot;file_not_found&quot;,
+            &quot;message&quot;: &quot;No resource was found under the path &lt;path&gt;&quot;
+        },
+        &quot;success&quot;: false
+    }
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – path to file or directory to be deleted</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--staging-(path-path)">
+<code class="descname">GET </code><code class="descname">/staging/</code><span class="sig-paren">(</span><em class="property">path: </em><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#get--staging-(path-path)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file or folder content from the staging folder.</p>
+<p>Returns A JSON array containing all file names, if it’s a directory or
+the file’s content if it’s a file.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/staging/&lt;path&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">404</span> <span class="ne">NOT FOUND</span>
+
+{
+    &quot;error&quot;: {
+        &quot;code&quot;: &quot;file_not_found&quot;,
+        &quot;message&quot;: &quot;No resource was found under the path test&quot;
+    },
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – path to file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – array containing all file names, if it’s a directory or the
+file’s content if it’s a file</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – file was not found</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--user-(user_name)">
+<code class="descname">GET </code><code class="descname">/user/</code><span class="sig-paren">(</span><em>user_name</em><span class="sig-paren">)</span><a class="headerlink" href="#get--user-(user_name)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the user information for the given user name.</p>
+<p>This endpoint can also be used implement authentication since only logged
+in users are allowed to retrieve their user info.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/user/&lt;username&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response SUCCESS</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;success&quot;: true,
+    &quot;user&quot;: {
+        &quot;user_name&quot;: &quot;test_user&quot;
+    }
+}
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">403</span> <span class="ne">FORBIDDEN</span>
+
+{
+    &quot;success&quot;: false
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_name</strong> (<em>str</em>) – name of the user</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>dict</strong> – operation result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">JSON object representing the user</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="post">
+<dt id="post--job-(job_type)">
+<code class="descname">POST </code><code class="descname">/job/</code><span class="sig-paren">(</span><em>job_type</em><span class="sig-paren">)</span><a class="headerlink" href="#post--job-(job_type)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a job of the specified job type.</p>
+<p>A task chain is constructed as defined in the corresponding job type
+definition YAML file and executed.</p>
+<p>Parameters can be provided as JSON objects as part of the request body
+and must match the parameters defined in the corresponding job config YAML.</p>
+<p>Valid user credential have to be given via HTTP basic authentication.</p>
+<p>Also adds the job to the job database.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/job/&lt;job-type&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+
+  {
+      &quot;metadata&quot;: {
+          &quot;volume&quot;: &quot;&quot;,
+          &quot;year&quot;: 2018,
+          &quot;number&quot;: &quot;&quot;,
+          &quot;description&quot;: &quot;[PDFs teilweise verfugbar]&quot;,
+          &quot;importFilePath&quot;: &quot;test.pdf&quot;,
+          &quot;identification&quot;: &quot;year&quot;
+      },
+      &quot;files&quot;: [{
+          &quot;file&quot;: &quot;test.pdf&quot;,
+          &quot;range&quot;: [
+              1,
+              5
+          ]
+      }],
+      &quot;parts&quot;: [{
+              &quot;metadata&quot;: {
+                  &quot;title&quot;: &quot;Ein kleines Musterdokument&quot;,
+                  &quot;abstract&quot;: &quot;Bachelorarbeit&quot;,
+                  &quot;author&quot;: [{
+                      &quot;firstname&quot;: &quot;Erich &quot;,
+                      &quot;lastname&quot;: &quot;Mustermann&quot;
+                  }],
+                  &quot;pages&quot;: {
+                      &quot;showndesc&quot;: &quot;101320&quot;,
+                      &quot;startPrint&quot;: 1,
+                      &quot;endPrint&quot;: 2
+                  },
+                  &quot;date_published&quot;: &quot;2018--&quot;,
+                  &quot;language&quot;: &quot;de_DE&quot;,
+                  &quot;zenonId&quot;: &quot;&quot;,
+                  &quot;auto_publish&quot;: true,
+                  &quot;create_frontpage&quot;: false
+              },
+              &quot;files&quot;: [{
+                  &quot;file&quot;: &quot;test.pdf&quot;,
+                  &quot;range&quot;: [
+                      1,
+                      2
+                  ]
+              }]
+          },
+          {
+              &quot;metadata&quot;: {
+                  &quot;title&quot;: &quot;Titel 2&quot;,
+                  &quot;author&quot;: [{
+                      &quot;firstname&quot;: &quot;Autor&quot;,
+                      &quot;lastname&quot;: &quot;Dererste&quot;
+                  }],
+                  &quot;pages&quot;: {
+                      &quot;showndesc&quot;: &quot;2101327&quot;,
+                      &quot;startPrint&quot;: 21,
+                      &quot;endPrint&quot;: 23
+                  },
+                  &quot;date_published&quot;: &quot;2018--&quot;,
+                  &quot;language&quot;: &quot;de_DE&quot;,
+                  &quot;zenonId&quot;: &quot;&quot;,
+                  &quot;auto_publish&quot;: true,
+                  &quot;create_frontpage&quot;: false
+              },
+              &quot;files&quot;: [{
+                  &quot;file&quot;: &quot;test.pdf&quot;,
+                  &quot;range&quot;: [
+                      21,
+                      23
+                  ]
+              }]
+          }
+      ],
+      &quot;nlp_params&quot;: {
+          &quot;lang&quot;: &quot;de&quot;
+      },
+      &quot;ojs_metadata&quot;: {
+          &quot;ojs_journal_code&quot;: &quot;test&quot;,
+          &quot;ojs_user&quot;: &quot;ojs_user&quot;,
+          &quot;auto_publish_issue&quot;: false,
+          &quot;default_publish_articles&quot;: true,
+          &quot;default_create_frontpage&quot;: true,
+          &quot;allow_upload_without_file&quot;: false
+      },
+      &quot;do_ocr&quot;: false
+  }
+</pre></div>
+</div>
+<p><strong>Example response SUCCESS</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;success&quot;: true,
+    &quot;job_id&quot;: &quot;010819cc-dc4d-11e8-b152-0242ac130008&quot;,
+    &quot;status&quot;: &quot;Accepted&quot;,
+    &quot;task_ids&quot;: [
+        &quot;9331a617-d35f-4b1a-be24-ec7a970c480e&quot;,
+        &quot;f012ef11-1ac0-4810-986a-c31335b918fb&quot;,
+        &quot;628abc60-2767-484a-a5c3-0b5a9c1a1ef6&quot;,
+        &quot;c2a97fd1-28d2-4e97-b41f-67b6f70d91df&quot;,
+        &quot;85cd98a7-fe3f-4e42-91f8-504c074be263&quot;,
+        &quot;5af3a39c-f837-41df-8a5e-ecdc55a2bef6&quot;,
+        &quot;2576d860-b694-4d41-8190-092f45837c37&quot;,
+        &quot;8b7e956a-2fc1-446f-9cc8-9f1d63471b2a&quot;,
+        &quot;d2d337a7-f346-4b7e-b1f8-4ee4942716f5&quot;,
+        &quot;94304191-45fd-45f0-937c-02a6b13fb64c&quot;,
+        &quot;b283d505-4174-4a46-909a-1f742dad6047&quot;,
+        &quot;010819cc-dc4d-11e8-b152-0242ac130008&quot;
+    ]
+}
+</pre></div>
+</div>
+<p><strong>Example response ERROR</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">400</span> <span class="ne">BAD REQUEST</span>
+
+    {
+        &quot;error&quot;: {
+            &quot;code&quot;: &quot;bad_request&quot;,
+            &quot;message&quot;: &quot;400 Bad Request: The browser (or proxy)
+                        sent a request that this server could
+                        not understand.&quot;
+        },
+        &quot;success&quot;: false
+    }
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>job_type</strong> (<em>str</em>) – name of the job type</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request JSON Object:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>metadata</strong> (<em>dict</em>) – descriptive data of the issue/book</li>
+<li><strong>files</strong> (<em>dict</em>) – files containing the raw data</li>
+<li><strong>parts</strong> (<em>dict</em>) – metadata for sub-parts</li>
+<li><strong>nlp_params</strong> (<em>dict</em>) – NLP instructions</li>
+<li><strong>ojs_metadata</strong> (<em>dict</em>) – OJS specific metadata</li>
+<li><strong>do_ocr</strong> (<em>string</em>) – switch for OCR execution</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>dict</strong> – operation result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">A JSON object containing the status, the job id and the task ids
+of every subtask in the chain</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--job-(job_id)">
+<code class="descname">GET </code><code class="descname">/job/</code><span class="sig-paren">(</span><em>job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#get--job-(job_id)" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the status information for a job.</p>
+<p>Also looks up the job  in the job database to get the name.</p>
+<p>This function is also used to get task status. Those cannot be found in the
+job database (as it only holds job info) and no further info will be
+returned.</p>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/job/&lt;job-id&gt;</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+
+{
+    &quot;result&quot;: {
+        &quot;object_id&quot;: &quot;issue-test-1&quot;
+    },
+    &quot;status&quot;: &quot;SUCCESS&quot;,
+    &quot;type&quot;: &quot;ingest_book&quot;
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Accept</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>job_id</strong> (<em>str</em>) – Job ID</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Response Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – application/json</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Response JSON Object:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>dict</strong> – operation result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – OK</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return:</th><td class="field-body"><p class="first last">A JSON object containing the status info</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-details">API Details</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Cilantro’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

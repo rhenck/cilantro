@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>test.unit.worker.nlp.text_analyzer_mock &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for test.unit.worker.nlp.text_analyzer_mock</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="TextAnalyzer"><a class="viewcode-back" href="../../../../../test.unit.worker.nlp.html#test.unit.worker.nlp.text_analyzer_mock.TextAnalyzer">[docs]</a><span></span><span class="k">class</span> <span class="nc">TextAnalyzer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Text Analyzer for testing purposes. Mocks the TextAnalyzer of the</span>
+<span class="sd">    nlp_components. Covers different test cases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testcase</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">testcase</span> <span class="ow">is</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="s2">&quot;de&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sentences</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">testcase</span> <span class="ow">is</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="s2">&quot;de&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Perikles&quot;</span><span class="p">,</span> <span class="s2">&quot;war&quot;</span><span class="p">,</span> <span class="s2">&quot;ein&quot;</span><span class="p">,</span> <span class="s2">&quot;Grieche&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;Genauso&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;wie&quot;</span><span class="p">,</span> <span class="s2">&quot;Aristoteles&quot;</span><span class="p">,</span> <span class="s2">&quot;aus&quot;</span><span class="p">,</span> <span class="s2">&quot;Stageria&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Perikles war ein Grieche.&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;Genauso wie Aristoteles aus Stageira.&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Perikles&#39;</span><span class="p">,</span> <span class="s1">&#39;I-PER&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;war&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;ein&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;Grieche&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Genauso&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;wie&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Aristoteles&#39;</span><span class="p">,</span> <span class="s1">&#39;I-PER&#39;</span><span class="p">),</span>
+                                <span class="p">(</span><span class="s1">&#39;aus&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Stageira&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Invalid testcase </span><span class="si">{testcase}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TextAnalyzer.do_ner"><a class="viewcode-back" href="../../../../../test.unit.worker.nlp.html#test.unit.worker.nlp.text_analyzer_mock.TextAnalyzer.do_ner">[docs]</a>    <span class="k">def</span> <span class="nf">do_ner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span></div>
+
+<div class="viewcode-block" id="TextAnalyzer.do_pos_tag"><a class="viewcode-back" href="../../../../../test.unit.worker.nlp.html#test.unit.worker.nlp.text_analyzer_mock.TextAnalyzer.do_pos_tag">[docs]</a>    <span class="k">def</span> <span class="nf">do_pos_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span></div>
+
+<div class="viewcode-block" id="TextAnalyzer.get_persons"><a class="viewcode-back" href="../../../../../test.unit.worker.nlp.html#test.unit.worker.nlp.text_analyzer_mock.TextAnalyzer.get_persons">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_persons</span><span class="p">(</span><span class="n">ne</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;persons&#39;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{})()</span></div>
+
+<div class="viewcode-block" id="TextAnalyzer.get_locations"><a class="viewcode-back" href="../../../../../test.unit.worker.nlp.html#test.unit.worker.nlp.text_analyzer_mock.TextAnalyzer.get_locations">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_locations</span><span class="p">(</span><span class="n">ne</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;locations&#39;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{})()</span></div>
+
+<div class="viewcode-block" id="TextAnalyzer.geoparse"><a class="viewcode-back" href="../../../../../test.unit.worker.nlp.html#test.unit.worker.nlp.text_analyzer_mock.TextAnalyzer.geoparse">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">geoparse</span><span class="p">(</span><span class="n">locs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;geoparsed&#39;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{})()</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

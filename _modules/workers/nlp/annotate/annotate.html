@@ -1,0 +1,277 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>workers.nlp.annotate.annotate &#8212; Cilantro alpha documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for workers.nlp.annotate.annotate</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">uuid</span>
+
+
+<div class="viewcode-block" id="annotate"><a class="viewcode-back" href="../../../../workers.nlp.annotate.html#workers.nlp.annotate.annotate.annotate">[docs]</a><span class="k">def</span> <span class="nf">annotate</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotate the given text.</span>
+
+<span class="sd">    Uses the TextAnalyzer of the dainst/nlp_components in the</span>
+<span class="sd">    nlp-worker docker container to annotate the text.</span>
+
+<span class="sd">    :param str text: the given text to annotate</span>
+<span class="sd">    :param str lang: language of the text, if empty the text_analyzer</span>
+<span class="sd">        tries to figure out it itself</span>
+<span class="sd">    :return dict: generated annotations with metadata</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="n">text_analyzer</span> <span class="o">=</span> <span class="n">_init_text_analyzer</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lang</span><span class="p">:</span>
+        <span class="n">text_analyzer</span><span class="o">.</span><span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span>
+
+    <span class="k">return</span> <span class="n">_add_metadata</span><span class="p">(</span><span class="n">text_analyzer</span><span class="p">,</span> <span class="n">_full_ner</span><span class="p">(</span><span class="n">text_analyzer</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_init_text_analyzer</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the Text Analyzer of the nlp components.</span>
+
+<span class="sd">    :param str text: The text to analyze</span>
+<span class="sd">    :return class: The text_analyzer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">nlp_components.idai_journals.publications</span> <span class="k">import</span> <span class="n">TextAnalyzer</span>
+    <span class="c1"># dependency in docker container</span>
+    <span class="n">text_analyzer</span> <span class="o">=</span> <span class="n">TextAnalyzer</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text_analyzer</span>
+
+
+<span class="k">def</span> <span class="nf">_full_ner</span><span class="p">(</span><span class="n">text_analyzer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run complete NER.</span>
+
+<span class="sd">    This includes extraction of different entity types and geotagging.</span>
+
+<span class="sd">    :param class text_analyzer: the text_analyzer of nlp_components</span>
+<span class="sd">    :return dict: json with persons, geotagged locations and metadata,</span>
+<span class="sd">        readalbe by the viewer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">named_entites</span> <span class="o">=</span> <span class="n">text_analyzer</span><span class="o">.</span><span class="n">do_ner</span><span class="p">()</span>
+
+    <span class="n">persons</span> <span class="o">=</span> <span class="n">_convert_list_of_objs_to_list_of_dicts</span><span class="p">(</span>
+        <span class="n">text_analyzer</span><span class="o">.</span><span class="n">get_persons</span><span class="p">(</span><span class="n">named_entites</span><span class="p">))</span>
+    <span class="n">locations</span> <span class="o">=</span> <span class="n">text_analyzer</span><span class="o">.</span><span class="n">get_locations</span><span class="p">(</span><span class="n">named_entites</span><span class="p">)</span>
+    <span class="n">geotagged_locations</span> <span class="o">=</span> <span class="n">_convert_list_of_objs_to_list_of_dicts</span><span class="p">(</span>
+        <span class="n">text_analyzer</span><span class="o">.</span><span class="n">geoparse</span><span class="p">(</span><span class="n">locations</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">_generatere_viewer_json</span><span class="p">(</span><span class="n">persons</span><span class="p">,</span> <span class="n">geotagged_locations</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_generatere_viewer_json</span><span class="p">(</span><span class="n">persons</span><span class="p">,</span> <span class="n">geotagged_locations</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate the complete, viewer compatible, JSON.</span>
+
+<span class="sd">    :param list persons: all entities of type person</span>
+<span class="sd">    :param list geotagged_locations: all entities of type location, enriched</span>
+<span class="sd">        with coordinates and gazetteer ids</span>
+<span class="sd">    :return dict: finalized json in viewer&#39;s format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">persons</span> <span class="o">=</span> <span class="n">_create_json_for_entity_type</span><span class="p">(</span><span class="n">persons</span><span class="p">)</span>
+    <span class="n">locations</span> <span class="o">=</span> <span class="n">_create_json_for_entity_type</span><span class="p">(</span><span class="n">geotagged_locations</span><span class="p">)</span>
+
+    <span class="n">viewer_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;persons&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="n">persons</span><span class="p">},</span>
+                   <span class="s2">&quot;locations&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="n">locations</span><span class="p">}}</span>
+    <span class="k">return</span> <span class="n">viewer_json</span>
+
+
+<span class="k">def</span> <span class="nf">_create_json_for_entity_type</span><span class="p">(</span><span class="n">nlp_entities</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create JSON for every entity type.</span>
+
+<span class="sd">    This is compatible to the viewer and the same for every entity type</span>
+<span class="sd">        (person, location). Not used keys are filled with None</span>
+<span class="sd">        (null in JSON). Join entities with the same lemma/normform.</span>
+
+<span class="sd">    :param list nlp_entities: all entities of an entity type as given by</span>
+<span class="sd">        the components</span>
+<span class="sd">    :return dict: viewer compatible json of this entity type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">viewer_entities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">nlp_entity</span> <span class="ow">in</span> <span class="n">nlp_entities</span><span class="p">:</span>
+
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">viewer_entities</span>
+                   <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;lemma&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;normform&quot;</span><span class="p">])]</span>
+        <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">viewer_entities</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+            <span class="n">match</span><span class="p">[</span><span class="s2">&quot;terms&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">])</span>
+            <span class="n">match</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">match</span><span class="p">[</span><span class="s2">&quot;pages&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">])</span>
+            <span class="n">viewer_entities</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">coordinates</span> <span class="o">=</span> <span class="p">[</span><span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">],</span> <span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">coordinates</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">references</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;refids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">url</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{nlp_entity[&#39;_baseurls&#39;][key]}{value}</span><span class="s2">&quot;</span>
+                    <span class="n">reference</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+                        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">key</span>
+                    <span class="p">}</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">reference</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+
+            <span class="n">viewer_entity</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">()),</span>
+                <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">]],</span>
+                <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">]],</span>
+                <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;lemma&quot;</span><span class="p">:</span> <span class="n">nlp_entity</span><span class="p">[</span><span class="s2">&quot;normform&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="n">coordinates</span><span class="p">,</span>
+                <span class="s2">&quot;references&quot;</span><span class="p">:</span> <span class="n">references</span>
+            <span class="p">}</span>
+            <span class="n">viewer_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">viewer_entity</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">viewer_entities</span>
+
+
+<span class="k">def</span> <span class="nf">_add_metadata</span><span class="p">(</span><span class="n">text_analyzer</span><span class="p">,</span> <span class="n">annotations</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add metadata to the annotations.</span>
+
+<span class="sd">    :param class text_analyzer: the text_analyzer of nlp_components</span>
+<span class="sd">    :param dict annotations: annotations made before</span>
+<span class="sd">    :return dict: annotations with metadata</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;detected_language&quot;</span><span class="p">:</span> <span class="n">text_analyzer</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span>
+        <span class="s2">&quot;word_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text_analyzer</span><span class="o">.</span><span class="n">words</span><span class="p">),</span>
+        <span class="s2">&quot;sentence_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text_analyzer</span><span class="o">.</span><span class="n">sentences</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="o">**</span><span class="n">annotations</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_convert_list_of_objs_to_list_of_dicts</span><span class="p">(</span><span class="n">list_of_objects</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively convert a list of objects to a list of dicts.</span>
+
+<span class="sd">    This works recursively and is needed because the NLP Textanalyzer</span>
+<span class="sd">    sometimes gives back a list of non-json-serializable objects, which</span>
+<span class="sd">    need to be converted to dicts. The list structure has to be kept.</span>
+
+<span class="sd">    :param list list_of_objects: List of objects to be converted to</span>
+<span class="sd">        list of dicts.</span>
+<span class="sd">    :return list: list of objects or a single one</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">list_of_objects</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">list_of_subobjects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">list_of_objects</span><span class="p">:</span>
+            <span class="n">list_of_subobjects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">_convert_list_of_objs_to_list_of_dicts</span><span class="p">(</span><span class="n">sub</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">list_of_subobjects</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">list_of_objects</span><span class="o">.</span><span class="vm">__dict__</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">Cilantro</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, DAI WissIT.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

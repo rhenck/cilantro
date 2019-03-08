@@ -1,0 +1,20 @@
+test.unit.service package
+=========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    test.unit.service.job
+    test.unit.service.repository
+    test.unit.service.staging
+    test.unit.service.user
+
+Module contents
+---------------
+
+.. automodule:: test.unit.service
+    :members:
+    :undoc-members:
+    :show-inheritance:
